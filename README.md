@@ -1,43 +1,83 @@
 # MicroContractsFramework
 
-MicroContractsFramework (MCF) is the dependency-neutral contract foundation for
-the VOSP micro-framework ecosystem. It lets independently replaceable modules
-exchange failures without depending on each other's runtime implementation.
+MicroContractsFramework (MCF) is a header-only C++23 contract library for
+building replaceable VOSP ecosystem components. It specifies compile-time API
+requirements; it does not implement errors, results, loggers, sinks,
+persistence, scheduling, or I/O.
 
-MCF is header-only and provides:
+MEF provides the standard production implementation of `Error`, `Result<T>`,
+and logging types. MPF and future frameworks may accept that implementation or
+any user-defined implementation satisfying the same MCF concepts.
 
-- `vosp::error::Error`;
-- `vosp::error::Result<T>` and `OperationResult` based on `std::expected`;
-- shared operational categories;
-- shared `LogEntry` and `ILogSink` contracts for direct logger/sink composition.
+## Why MCF exists
 
-It deliberately does not contain logger implementations, persistence,
-schedulers, registries, telemetry, I/O, or plugins.
+Frameworks depend on stable requirements instead of each other's concrete
+classes:
 
-## Usage
+```text
+                 MicroContractsFramework
+                 concepts / requirements
+                    ^              ^
+                    |              |
+          MEF implementation    MPF templates
+                    \              /
+                     application
+```
+
+This provides compile-time dependency inversion without runtime registries,
+wrapper objects, conversions, or adapter layers.
+
+## Contracts
+
+- `vosp::contracts::Error<T>` checks an owning error API;
+- `vosp::contracts::Result<R, E>` checks an expected-like result API;
+- `vosp::contracts::ErrorModel<M>` checks an error/result provider;
+- `vosp::contracts::LogEntry<T>` checks a structured entry;
+- `vosp::contracts::LogSink<S, E>` checks a structural sink implementation.
+
+MCF contains no concrete `Error`, `Result`, `LogEntry`, or `Sink` class.
+
+## Custom implementation
 
 ```cpp
 #include <vosp/contracts/error.hpp>
 
-vosp::error::Result<int> read_value(bool available)
+#include <expected>
+#include <string>
+#include <string_view>
+
+struct MyError
 {
-    if (!available)
-    {
-        return std::unexpected(vosp::error::Error{
-            vosp::error::Category::DATABASE, 1, "Value is unavailable"});
-    }
-    return 42;
-}
+    std::uint32_t code() const noexcept;
+    std::string_view message() const noexcept;
+};
+
+struct MyErrorModel
+{
+    using Error = MyError;
+
+    template<class T>
+    using Result = std::expected<T, Error>;
+
+    using OperationResult = Result<void>;
+
+    static Error make_error(std::uint32_t code, std::string message);
+};
+
+static_assert(vosp::contracts::ErrorModel<MyErrorModel>);
 ```
+
+MEF's implementation satisfies the same contract, so a framework parameterized
+by `ErrorModel` can switch implementations without changing its algorithms.
 
 ## CMake
 
 ```cmake
-find_package(vosp_contracts 0.3 REQUIRED CONFIG)
+find_package(vosp_contracts 0.4 REQUIRED CONFIG)
 target_link_libraries(your_target PRIVATE vosp::contracts)
 ```
 
-Build and test locally:
+Build and test:
 
 ```sh
 cmake -S . -B build -DBUILD_TESTING=ON
@@ -45,12 +85,13 @@ cmake --build build --parallel
 ctest --test-dir build --output-on-failure
 ```
 
-Requires C++23 and a standard library with `std::expected`.
+Supported CI toolchains are GCC, Clang, and MSVC. MCF requires C++23 and has no
+runtime or third-party dependency.
 
 ## Dependency rule
 
-Dependencies point toward contracts. MCF never depends on MEF, MPF, or any
-future ecosystem framework. Cross-framework behavior belongs in optional edge
-adapters, not in this package.
+Dependencies may point to MCF. MCF never depends on MEF, MPF, or another
+ecosystem implementation. Concrete behavior remains in the framework that owns
+it or in the final application composition root.
 
 Licensed under the MIT License.

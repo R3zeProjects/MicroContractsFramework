@@ -22,18 +22,30 @@ jobs:
           - name: Linux GCC
             os: ubuntu-latest
             cmake_args: -DCMAKE_CXX_COMPILER=g++
+            cxxflags: ''
           - name: Linux Clang
             os: ubuntu-latest
             cmake_args: -DCMAKE_CXX_COMPILER=clang++
+            cxxflags: -stdlib=libc++ -fexperimental-library
           - name: Windows MSVC
             os: windows-latest
             cmake_args: ''
+            cxxflags: ''
+    env:
+      CXXFLAGS: ${{ matrix.cxxflags }}
+      LDFLAGS: ${{ matrix.cxxflags }}
     steps:
       - uses: actions/checkout@v5
+      - name: Install Clang standard library
+        if: matrix.name == 'Linux Clang'
+        run: >-
+          .github/scripts/install-apt-packages.sh
+          clang libc++-dev libc++abi-dev
       - name: Configure
         shell: bash
         run: >-
           cmake -S . -B build
+          -DCMAKE_BUILD_TYPE=Release
           -DBUILD_TESTING=ON
           ${{ matrix.cmake_args }}
       - name: Build
@@ -51,9 +63,34 @@ jobs:
           cmake -S . -B build -DBUILD_TESTING=OFF -DCMAKE_BUILD_TYPE=Release
           cmake --build build --parallel
           cmake --install build --prefix "$PWD/install"
+          grep -F 'set(PACKAGE_VERSION "0.4.0")' \
+            install/lib/cmake/vosp_contracts/vosp_contractsConfigVersion.cmake
       - name: Consume installed package
         run: |
           cmake -S tests/package_consumer -B consumer \
             -DCMAKE_PREFIX_PATH="$PWD/install"
           cmake --build consumer --parallel
           ./consumer/vosp_contracts_package_consumer
+
+  static-analysis:
+    name: Linux clang-tidy
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      CXXFLAGS: -stdlib=libc++ -fexperimental-library
+      LDFLAGS: -stdlib=libc++ -fexperimental-library
+    steps:
+      - uses: actions/checkout@v5
+      - name: Install analysis toolchain
+        run: >-
+          .github/scripts/install-apt-packages.sh
+          clang clang-tidy ninja-build libc++-dev libc++abi-dev
+      - name: Configure
+        run: >-
+          cmake -S . -B build -G Ninja
+          -DCMAKE_BUILD_TYPE=Debug
+          -DCMAKE_CXX_COMPILER=clang++
+          -DCMAKE_CXX_CLANG_TIDY=clang-tidy
+          -DBUILD_TESTING=ON
+      - name: Analyze contracts and mock implementations
+        run: cmake --build build --parallel 2

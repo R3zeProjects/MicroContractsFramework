@@ -2,28 +2,37 @@
 
 ## Scope
 
-MCF owns only value-level contracts that may cross framework boundaries. It has
-no runtime state, platform I/O, background workers, or dependency on another
-VOSP framework.
+MCF owns compile-time protocols shared across independently replaceable
+frameworks. It contains concepts and version metadata, but no concrete domain
+implementation, runtime state, allocation policy, I/O, worker, or global
+registry.
+
+## Dependency direction
 
 ```text
-vosp::contracts <- MEF
-       ^            ^
-       |            |
-    MPF core <- MPF-MEF adapter
+                 vosp::contracts
+                 concepts only
+                   ^        ^
+                   |        |
+                  MEF      MPF
+                   \        /
+                    program
 ```
+
+MEF implements the standard error and logging model. MPF is parameterized by an
+error model and may use MEF's implementation or another compatible model.
 
 ## Invariants
 
-- `Error` owns its diagnostic message.
-- `Result<T>` is exactly `std::expected<T, Error>`.
-- Public contracts use value semantics and contain no owning raw pointers.
-- Dependency arrows may point to MCF; MCF never points back.
-- Framework-specific error codes are owned by their framework, not MCF.
+- MCF concepts use structural compile-time checks.
+- Satisfying a contract never requires inheritance unless a future contract
+  explicitly documents it.
+- MCF creates no framework value and owns no runtime resource.
+- MCF never includes MEF or MPF headers.
+- Implementations are rejected at compile time when required operations or
+  result semantics are missing.
 
 ## Non-goals
 
-MCF defines the sink boundary but no concrete sink or logger. It does not define
-persistence backends, register policies, schedulers, or transport formats.
-Those concerns remain independently replaceable and compose through the same
-contract types without conversion layers.
+MCF does not provide a default error, logger, sink, backend, codec, scheduler,
+formatter, hashing algorithm, exception translator, or persistence format.

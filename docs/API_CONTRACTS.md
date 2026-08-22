@@ -1,32 +1,32 @@
 # API contracts
 
-## Includes and target
+## Public surface
 
-- Canonical error header: `<vosp/contracts/error.hpp>`.
-- Canonical logging boundary: `<vosp/contracts/logging.hpp>`.
-- Umbrella header: `<vosp/contracts.hpp>`.
-- Exported CMake target: `vosp::contracts`.
+- `<vosp/contracts/error.hpp>`: `Error`, `Result`, and `ErrorModel` concepts;
+- `<vosp/contracts/logging.hpp>`: `LogEntry` and `LogSink` concepts;
+- `<vosp/contracts.hpp>`: supported umbrella;
+- `vosp::contracts`: exported CMake target.
 
-## Ownership and lifetime
+## Error model
 
-`Error` owns its message. Values returned from `message()` are views into that
-owned string and remain valid until the `Error` is mutated, moved from, or
-destroyed.
+An error is copyable and movable and exposes `code()` and `message()`. An error
+model owns the actual `Error`, `Result<T>`, and `OperationResult` definitions and
+provides `make_error`. MCF validates that API but never supplies its
+implementation.
 
-## Failures
+## Logging
 
-`Result<T>` is `std::expected<T, Error>`. Recoverable domain failures cross
-framework boundaries as values; MCF itself performs no logging or persistence.
+A log entry exposes an error and level. A sink structurally provides
+`bool write(const Entry&)`. Inheritance and a particular virtual interface are
+not required by MCF.
 
-`LogEntry` owns its `Error`. `ILogSink::write` receives a const reference valid
-only for the duration of the call. Implementations that retain an entry must
-copy or move an owning value into their own storage.
+## Diagnostics
 
-MCF contains no formatting, hashing, exception translation, logging, or
-persistence algorithms. Those implementations belong to MEF, MPF, or another
-framework that consumes these contracts.
+Concept failures are compile-time API diagnostics. MCF performs no runtime
+validation, allocation, exception translation, logging, or conversion.
 
 ## Stability
 
-The `vosp::error` namespace is shared intentionally. Framework-specific numeric
-codes remain owned and documented by the framework that emits them.
+Breaking concept changes require a minor version increment before 1.0. New
+optional concepts may be introduced in patch releases when existing satisfying
+types remain valid.

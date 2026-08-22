@@ -1,46 +1,24 @@
 #pragma once
 
-/** @file logging.hpp Shared logging boundary for ecosystem components. */
+/** @file logging.hpp Compile-time contracts for log entries and sinks. */
 
 #include <vosp/contracts/error.hpp>
 
-#include <chrono>
 #include <concepts>
-#include <cstdint>
-#include <thread>
 #include <type_traits>
 
-namespace vosp::logger
+namespace vosp::contracts
 {
-/** @brief Severity of a log record. */
-enum class Level : std::uint8_t
-{
-    TRACE,
-    DEBUG,
-    INFO,
-    WARNING,
-    ERROR,
-    CRITICAL
+/** @brief Requirements imposed on a structured log-entry implementation. */
+template <typename Type>
+concept LogEntry = requires(const Type &entry) {
+    requires Error<std::remove_cvref_t<decltype(entry.error)>>;
+    entry.level;
 };
 
-/** @brief Owning log value exchanged directly between producers and sinks. */
-struct LogEntry
-{
-    std::chrono::system_clock::time_point timestamp{};
-    std::thread::id thread_id{};
-    Level level = Level::INFO;
-    vosp::error::Error error;
+/** @brief Structural sink protocol; inheritance is not required. */
+template <typename Sink, typename Entry>
+concept LogSink = LogEntry<Entry> && requires(Sink &sink, const Entry &entry) {
+    { sink.write(entry) } -> std::same_as<bool>;
 };
-
-/** @brief Direct destination contract for one structured log record. */
-class ILogSink
-{
-  public:
-    [[nodiscard]] virtual bool write(const LogEntry &entry) = 0;
-    virtual ~ILogSink() noexcept = default;
-};
-
-/** @brief Restricts a type to direct ILogSink implementations. */
-template <typename Sink>
-concept SinkType = std::derived_from<std::remove_cvref_t<Sink>, ILogSink>;
-} // namespace vosp::logger
+} // namespace vosp::contracts

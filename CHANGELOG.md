@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.4.0-beta
+
+- Replaced concrete ecosystem value types with prototype-only C++ concepts.
+- Added `Error`, `Result`, `ErrorModel`, `LogEntry`, and structural `LogSink`
+  requirements for arbitrary compatible implementations.
+- Added self-contained header and negative concept checks.
+
 ## 0.3.0-beta
 
 - Restricted MCF to value schemas, aliases, concepts, and pure interfaces.
