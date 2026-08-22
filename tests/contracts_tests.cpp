@@ -2,6 +2,7 @@
 
 #include <cstdint>
 #include <expected>
+#include <memory>
 #include <string>
 #include <string_view>
 #include <span>
@@ -78,6 +79,37 @@ struct TestExporter
     }
 };
 
+struct TestConfigurationSnapshot
+{
+    [[nodiscard]] std::uint64_t revision() const noexcept { return 7; }
+
+    [[nodiscard]] bool contains(std::string_view key) const noexcept
+    {
+        return key == "service.port";
+    }
+};
+
+struct TestConfigurationProvider
+{
+    using Snapshot = TestConfigurationSnapshot;
+
+    [[nodiscard]] std::shared_ptr<const Snapshot> snapshot() const
+    {
+        return std::make_shared<const Snapshot>();
+    }
+};
+
+struct TestConfigurationObserver
+{
+    void configuration_changed(
+        std::shared_ptr<const TestConfigurationSnapshot> snapshot)
+    {
+        last_revision = snapshot->revision();
+    }
+
+    std::uint64_t last_revision = 0;
+};
+
 static_assert(vosp::contracts::Error<TestError>);
 static_assert(!vosp::contracts::Error<InvalidError>);
 static_assert(vosp::contracts::ErrorModel<TestErrorModel>);
@@ -85,6 +117,10 @@ static_assert(vosp::contracts::LogEntry<TestEntry>);
 static_assert(vosp::contracts::LogSink<TestSink, TestEntry>);
 static_assert(vosp::contracts::TelemetryRecord<TestTelemetryRecord>);
 static_assert(vosp::contracts::TelemetryExporter<TestExporter, TestTelemetryRecord>);
+static_assert(vosp::contracts::ConfigurationSnapshot<TestConfigurationSnapshot>);
+static_assert(vosp::contracts::ConfigurationProvider<TestConfigurationProvider>);
+static_assert(vosp::contracts::ConfigurationObserver<
+              TestConfigurationObserver, TestConfigurationSnapshot>);
 } // namespace
 
 int main()

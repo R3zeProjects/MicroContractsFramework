@@ -3,7 +3,7 @@
 MicroContractsFramework (MCF) is a header-only C++23 contract library for
 building replaceable VOSP ecosystem components. It specifies compile-time API
 requirements; it does not implement errors, results, loggers, sinks,
-persistence, scheduling, or I/O.
+persistence, configuration storage, scheduling, or I/O.
 
 MEF provides the standard production implementation of `Error`, `Result<T>`,
 and logging types. MPF and future frameworks may accept that implementation or
@@ -36,6 +36,9 @@ wrapper objects, conversions, or adapter layers.
 - `vosp::contracts::LogSink<S, E>` checks a structural sink implementation.
 - `vosp::contracts::TelemetryRecord<T>` checks an owning telemetry value;
 - `vosp::contracts::TelemetryExporter<X, T>` checks a batch exporter.
+- `vosp::contracts::ConfigurationSnapshot<T>` checks an immutable snapshot;
+- `vosp::contracts::ConfigurationProvider<T>` checks snapshot publication;
+- `vosp::contracts::ConfigurationObserver<O, S>` checks change observers.
 
 MCF contains no concrete `Error`, `Result`, `LogEntry`, or `Sink` class.
 
@@ -75,7 +78,7 @@ by `ErrorModel` can switch implementations without changing its algorithms.
 ## CMake
 
 ```cmake
-find_package(vosp_contracts 0.5 REQUIRED CONFIG)
+find_package(vosp_contracts 0.6 REQUIRED CONFIG)
 target_link_libraries(your_target PRIVATE vosp::contracts)
 ```
 

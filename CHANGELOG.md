@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.6.0-beta
+
+- Added structural configuration snapshot, provider, and observer contracts.
+- Kept configuration values, parsing, storage, and reload policy outside MCF.
+
 ## 0.5.0-beta
 
 - Added structural `TelemetryRecord` and `TelemetryExporter` contracts.
