@@ -34,6 +34,8 @@ wrapper objects, conversions, or adapter layers.
 - `vosp::contracts::ErrorModel<M>` checks an error/result provider;
 - `vosp::contracts::LogEntry<T>` checks a structured entry;
 - `vosp::contracts::LogSink<S, E>` checks a structural sink implementation.
+- `vosp::contracts::TelemetryRecord<T>` checks an owning telemetry value;
+- `vosp::contracts::TelemetryExporter<X, T>` checks a batch exporter.
 
 MCF contains no concrete `Error`, `Result`, `LogEntry`, or `Sink` class.
 
@@ -73,7 +75,7 @@ by `ErrorModel` can switch implementations without changing its algorithms.
 ## CMake
 
 ```cmake
-find_package(vosp_contracts 0.4 REQUIRED CONFIG)
+find_package(vosp_contracts 0.5 REQUIRED CONFIG)
 target_link_libraries(your_target PRIVATE vosp::contracts)
 ```
 

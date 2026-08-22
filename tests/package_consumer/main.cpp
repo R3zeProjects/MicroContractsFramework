@@ -4,6 +4,8 @@
 #include <expected>
 #include <string>
 #include <string_view>
+#include <span>
+#include <chrono>
 
 namespace
 {
@@ -29,10 +31,25 @@ struct Model
 };
 
 static_assert(vosp::contracts::ErrorModel<Model>);
+
+struct TelemetryRecord
+{
+    [[nodiscard]] std::string_view name() const noexcept { return "consumer"; }
+    [[nodiscard]] std::chrono::system_clock::time_point timestamp() const noexcept
+    {
+        return {};
+    }
+};
+
+struct Exporter
+{
+    [[nodiscard]] bool export_batch(std::span<const TelemetryRecord>) { return true; }
+};
+
+static_assert(vosp::contracts::TelemetryExporter<Exporter, TelemetryRecord>);
 } // namespace
 
 int main()
 {
     return Model::make_error(7, "consumer").code() == 7 ? 0 : 1;
 }
-

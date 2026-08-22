@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.5.0-beta
+
+- Added structural `TelemetryRecord` and `TelemetryExporter` contracts.
+- Kept telemetry storage, instrumentation, scheduling, and transport outside MCF.
+
 ## 0.4.0-beta
 
 - Replaced concrete ecosystem value types with prototype-only C++ concepts.

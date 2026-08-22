@@ -63,7 +63,7 @@ jobs:
           cmake -S . -B build -DBUILD_TESTING=OFF -DCMAKE_BUILD_TYPE=Release
           cmake --build build --parallel
           cmake --install build --prefix "$PWD/install"
-          grep -F 'set(PACKAGE_VERSION "0.4.0")' \
+          grep -F 'set(PACKAGE_VERSION "0.5.0")' \
             install/lib/cmake/vosp_contracts/vosp_contractsConfigVersion.cmake
       - name: Consume installed package
         run: |

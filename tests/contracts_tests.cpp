@@ -4,6 +4,8 @@
 #include <expected>
 #include <string>
 #include <string_view>
+#include <span>
+#include <chrono>
 
 namespace
 {
@@ -56,11 +58,33 @@ struct InvalidError
 {
 };
 
+struct TestTelemetryRecord
+{
+    [[nodiscard]] std::string_view name() const noexcept { return metric_name; }
+    [[nodiscard]] std::chrono::system_clock::time_point timestamp() const noexcept
+    {
+        return captured_at;
+    }
+
+    std::string metric_name;
+    std::chrono::system_clock::time_point captured_at{};
+};
+
+struct TestExporter
+{
+    [[nodiscard]] bool export_batch(std::span<const TestTelemetryRecord>)
+    {
+        return true;
+    }
+};
+
 static_assert(vosp::contracts::Error<TestError>);
 static_assert(!vosp::contracts::Error<InvalidError>);
 static_assert(vosp::contracts::ErrorModel<TestErrorModel>);
 static_assert(vosp::contracts::LogEntry<TestEntry>);
 static_assert(vosp::contracts::LogSink<TestSink, TestEntry>);
+static_assert(vosp::contracts::TelemetryRecord<TestTelemetryRecord>);
+static_assert(vosp::contracts::TelemetryExporter<TestExporter, TestTelemetryRecord>);
 } // namespace
 
 int main()
