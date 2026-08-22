@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.25)
 
-project(MicroContractsFramework VERSION 0.2.0 LANGUAGES CXX)
+project(MicroContractsFramework VERSION 0.3.0 LANGUAGES CXX)
 
 set(MICRO_CONTRACTS_FRAMEWORK_PRERELEASE "beta")
 

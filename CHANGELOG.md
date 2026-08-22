@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.3.0-beta
+
+- Restricted MCF to value schemas, aliases, concepts, and pure interfaces.
+- Moved formatting, hashing, and exception-translation behavior back to MEF.
+
 ## 0.2.0-beta
 
 - Added direct `Level`, `LogEntry`, `ILogSink`, and `SinkType` contracts.

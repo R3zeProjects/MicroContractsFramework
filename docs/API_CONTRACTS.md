@@ -18,14 +18,13 @@ destroyed.
 `Result<T>` is `std::expected<T, Error>`. Recoverable domain failures cross
 framework boundaries as values; MCF itself performs no logging or persistence.
 
-`attempt` catches exceptions thrown by the supplied operation. It appends a
-`std::exception` diagnostic to the fallback message and preserves the fallback
-error for unknown exceptions. Allocation failures while constructing the
-diagnostic may propagate.
-
 `LogEntry` owns its `Error`. `ILogSink::write` receives a const reference valid
 only for the duration of the call. Implementations that retain an entry must
 copy or move an owning value into their own storage.
+
+MCF contains no formatting, hashing, exception translation, logging, or
+persistence algorithms. Those implementations belong to MEF, MPF, or another
+framework that consumes these contracts.
 
 ## Stability
 
