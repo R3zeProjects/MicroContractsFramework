@@ -1,0 +1,5 @@
+@PACKAGE_INIT@
+
+include("${CMAKE_CURRENT_LIST_DIR}/vosp_contractsTargets.cmake")
+check_required_components(vosp_contracts)
+
