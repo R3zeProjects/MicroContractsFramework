@@ -23,7 +23,7 @@ vosp::contracts <- MEF
 
 ## Non-goals
 
-MCF does not define persistence backends, logger sinks, register policies,
-schedulers, or transport formats. Those concerns remain independently
-replaceable.
-
+MCF defines the sink boundary but no concrete sink or logger. It does not define
+persistence backends, register policies, schedulers, or transport formats.
+Those concerns remain independently replaceable and compose through the same
+contract types without conversion layers.

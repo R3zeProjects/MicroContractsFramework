@@ -3,6 +3,7 @@
 ## Includes and target
 
 - Canonical error header: `<vosp/contracts/error.hpp>`.
+- Canonical logging boundary: `<vosp/contracts/logging.hpp>`.
 - Umbrella header: `<vosp/contracts.hpp>`.
 - Exported CMake target: `vosp::contracts`.
 
@@ -21,6 +22,10 @@ framework boundaries as values; MCF itself performs no logging or persistence.
 `std::exception` diagnostic to the fallback message and preserves the fallback
 error for unknown exceptions. Allocation failures while constructing the
 diagnostic may propagate.
+
+`LogEntry` owns its `Error`. `ILogSink::write` receives a const reference valid
+only for the duration of the call. Implementations that retain an entry must
+copy or move an owning value into their own storage.
 
 ## Stability
 

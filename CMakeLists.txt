@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.25)
 
-project(MicroContractsFramework VERSION 0.1.0 LANGUAGES CXX)
+project(MicroContractsFramework VERSION 0.2.0 LANGUAGES CXX)
 
 set(MICRO_CONTRACTS_FRAMEWORK_PRERELEASE "beta")
 
@@ -53,4 +53,3 @@ install(FILES
     ${CMAKE_CURRENT_BINARY_DIR}/vosp_contractsConfigVersion.cmake
     DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/vosp_contracts
 )
-

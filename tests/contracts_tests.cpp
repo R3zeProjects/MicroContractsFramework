@@ -5,6 +5,21 @@
 #include <string>
 #include <unordered_set>
 
+namespace
+{
+class CountingSink final : public vosp::logger::ILogSink
+{
+  public:
+    [[nodiscard]] bool write(const vosp::logger::LogEntry &) override
+    {
+        ++count;
+        return true;
+    }
+
+    int count = 0;
+};
+} // namespace
+
 int main()
 {
     using namespace vosp::error;
@@ -31,5 +46,13 @@ int main()
 
     const OperationResult operation{};
     assert(operation);
-}
 
+    CountingSink sink;
+    const vosp::logger::LogEntry entry{
+        .level = vosp::logger::Level::WARNING,
+        .error = Error{Category::FILESYSTEM, 3, "persist"},
+    };
+    assert(sink.write(entry));
+    assert(sink.count == 1);
+    assert(vosp::logger::to_string(entry.level) == "WARNING");
+}

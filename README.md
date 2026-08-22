@@ -9,10 +9,11 @@ MCF is header-only and provides:
 - `vosp::error::Error`;
 - `vosp::error::Result<T>` and `OperationResult` based on `std::expected`;
 - shared operational categories;
-- stable formatting, hashing, and exception translation.
+- stable formatting, hashing, and exception translation;
+- shared `LogEntry` and `ILogSink` contracts for direct logger/sink composition.
 
-It deliberately does not contain logging, persistence, threading, registries,
-telemetry, I/O, or plugin implementations.
+It deliberately does not contain logger implementations, persistence,
+schedulers, registries, telemetry, I/O, or plugins.
 
 ## Usage
 
@@ -33,7 +34,7 @@ vosp::error::Result<int> read_value(bool available)
 ## CMake
 
 ```cmake
-find_package(vosp_contracts 0.1 REQUIRED CONFIG)
+find_package(vosp_contracts 0.2 REQUIRED CONFIG)
 target_link_libraries(your_target PRIVATE vosp::contracts)
 ```
 
