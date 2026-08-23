@@ -6,7 +6,6 @@
 #include <cstdint>
 #include <string>
 #include <string_view>
-#include <type_traits>
 #include <utility>
 
 namespace vosp::contracts

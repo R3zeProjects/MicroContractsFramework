@@ -41,6 +41,9 @@ wrapper objects, conversions, or adapter layers.
 - `vosp::contracts::ConfigurationObserver<O, S>` checks change observers.
 
 MCF contains no concrete `Error`, `Result`, `LogEntry`, or `Sink` class.
+Its performance contract is zero runtime work: all checks are concepts evaluated
+at compile time. Negative tests now also reject sinks and telemetry exporters
+whose return types do not satisfy the shared contracts.
 
 ## Custom implementation
 

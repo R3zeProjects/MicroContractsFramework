@@ -55,6 +55,11 @@ struct TestSink
     [[nodiscard]] bool write(const TestEntry &) { return true; }
 };
 
+struct InvalidSink
+{
+    void write(const TestEntry&);
+};
+
 struct InvalidError
 {
 };
@@ -77,6 +82,11 @@ struct TestExporter
     {
         return true;
     }
+};
+
+struct InvalidExporter
+{
+    void export_batch(std::span<const TestTelemetryRecord>);
 };
 
 struct TestConfigurationSnapshot
@@ -115,8 +125,10 @@ static_assert(!vosp::contracts::Error<InvalidError>);
 static_assert(vosp::contracts::ErrorModel<TestErrorModel>);
 static_assert(vosp::contracts::LogEntry<TestEntry>);
 static_assert(vosp::contracts::LogSink<TestSink, TestEntry>);
+static_assert(!vosp::contracts::LogSink<InvalidSink, TestEntry>);
 static_assert(vosp::contracts::TelemetryRecord<TestTelemetryRecord>);
 static_assert(vosp::contracts::TelemetryExporter<TestExporter, TestTelemetryRecord>);
+static_assert(!vosp::contracts::TelemetryExporter<InvalidExporter, TestTelemetryRecord>);
 static_assert(vosp::contracts::ConfigurationSnapshot<TestConfigurationSnapshot>);
 static_assert(vosp::contracts::ConfigurationProvider<TestConfigurationProvider>);
 static_assert(vosp::contracts::ConfigurationObserver<
