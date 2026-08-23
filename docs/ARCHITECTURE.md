@@ -1,33 +1,34 @@
-# Architecture
+# Архитектура
 
-## Scope
+## Область
 
-MCF owns compile-time protocols shared across independently replaceable
-frameworks. It contains concepts and version metadata, but no concrete domain
-implementation, runtime state, allocation policy, I/O, worker, or global
-registry.
+MCF владеет протоколами compile-time, которые используются совместно через независимо
+заменяемые фреймворки. Он содержит концепции и метаданные версий, но не содержит
+конкретной реализации домена, состояния runtime, политики выделение памяти,
+ввода/вывода, worker или глобального registry.
 
 ## Принципы работы
 
-MCF применяет **структурные контракты во время компиляции**. Пользователь
-передаёт тип в шаблон фреймворка, после чего concept проверяет наличие операций,
-их `const`-квалификацию и точную семантику результата. Подходящий тип напрямую
-встраивается в алгоритм, а несовместимый останавливает компиляцию на границе API.
+MCF применяет **структурные контракты на этапе компиляции**. Пользователь передаёт тип в
+шаблон фреймворка; выбранный concept проверяет необходимые выражения, их
+const-квалификацию и точную семантику результата. Совместимый тип непосредственно
+встраивается в алгоритм. Несовместимость останавливает компиляцию на границе API, а не
+превращается в runtime-ветвление или неудачное приведение типа.
 
 ```text
-тип-кандидат -> подстановка concept -> проверка выражений
-                                    -> успех: статическая композиция
-                                    -> ошибка: диагностика компилятора
+candidate type -> concept substitution -> required operations checked
+                                      -> accepted: direct static composition
+                                      -> rejected: compile-time diagnostic
 ```
 
-Контракт описывает возможности, а не наследование. Реализация не обязана
-наследоваться от MCF, а MCF не создаёт объекты, не владеет ими, не выделяет
-память и не запускает задачи. Поэтому зависимость всегда направлена от
-реализации к контрактам, а подключение MCF не добавляет runtime-состояния.
-Точные требования к expected-подобным результатам сохраняют явный канал ошибок,
-не фиксируя конкретный тип ошибки.
+Контракты описывают возможности, а не иерархию наследования. Реализации не обязаны
+наследоваться от классов MCF; MCF не создаёт их объекты, не владеет ими, не выделяет для
+них память, не планирует и не уничтожает их. Поэтому подключение MCF не добавляет
+runtime-состояния, а зависимости всегда направлены от конкретных фреймворков к
+контрактам. Точные требования к expected-like результатам сохраняют явный канал ошибок,
+не фиксируя конкретное представление ошибки.
 
-## Dependency direction
+## Направление зависимости
 
 ```text
                  vosp::contracts
@@ -39,20 +40,20 @@ MCF применяет **структурные контракты во врем
                     program
 ```
 
-MEF implements the standard error and logging model. MPF is parameterized by an
-error model and may use MEF's implementation or another compatible model.
+MEF реализует стандартную модель ошибки и модель логгирование. MPF параметризуется
+моделью ошибки и может использовать реализацию MEF или другую совместимую модель.
 
-## Invariants
+## Инварианты
 
-- MCF concepts use structural compile-time checks.
-- Satisfying a contract never requires inheritance unless a future contract
-  explicitly documents it.
-- MCF creates no framework value and owns no runtime resource.
-- MCF never includes MEF or MPF headers.
-- Implementations are rejected at compile time when required operations or
-  result semantics are missing.
+- Концепции MCF используют структурные проверки compile-time.
+- Выполнение контракта никогда не требует наследования, если только будущий контракт
+  явно это не документирует.
+- MCF не создает значения фреймворк и не владеет ресурсом runtime.
+- MCF никогда не включает заголовки MEF или MPF.
+- Реализации отклоняются на этапе компиляции, когда отсутствуют необходимые операции или
+  семантика результата.
 
-## Non-goals
+## Нецели
 
-MCF does not provide a default error, logger, sink, backend, codec, scheduler,
-formatter, hashing algorithm, exception translator, or persistence format.
+MCF не предоставляет стандартную ошибку, logger, sink, backend, codec, планировщик,
+форматировщик, алгоритм хэширования, преобразователь исключений или формат persistence.

@@ -1,29 +1,30 @@
 # Примеры использования
 
-MCF содержит compile-time протоколы, а не runtime-реализации. Поэтому примеры
-определяют собственные типы приложения и проверяют их через `static_assert`.
+MCF содержит протоколы compile-time, а не реализации runtime. Следовательно, примеры
+определяют типы, принадлежащие приложению, и доказывают их совместимость с
+`static_assert`.
 
-## Полное покрытие контрактов
+## Полное покрытие по контракту
 
-Исполняемый [`examples/contracts.cpp`](../examples/contracts.cpp) охватывает:
+Компилируемый [`examples/contracts.cpp`](../examples/contracts.cpp) охватывает:
 
-| Контракт | Назначение |
+| Контракт | Требуемая роль |
 |---|---|
-| `Error<T>` | владеющий код и сообщение ошибки |
-| `Result<R, E>` | expected-подобный канал результата |
+| `Error<T>` | владение кодом и значением сообщения |
+| `Result<R, E>` | expected-like канал успеха/ошибки |
 | `ErrorModel<M>` | фабрика ошибок и семейство `Result<T>` |
-| `LogEntry<T>` | структурированная запись |
+| `LogEntry<T>` | структурированный уровень и значение ошибки |
 | `LogSink<S, E>` | структурный `bool write(const E&)` sink |
-| `TelemetryRecord<T>` | владеющая запись телеметрии |
-| `TelemetryExporter<X, T>` | пакетный exporter |
-| `ConfigurationSnapshot<T>` | неизменяемая ревизия конфигурации |
-| `ConfigurationProvider<T>` | получение shared snapshot |
-| `ConfigurationObserver<O, S>` | уведомление об изменении |
+| `TelemetryRecord<T>` | именной, с отметкой времени учетный запись |
+| `TelemetryExporter<X, T>` | пакет exporter |
+| `ConfigurationSnapshot<T>` | неизменяемая ревизия и поиск по ключу |
+| `ConfigurationProvider<T>` | совместное приобретение snapshot |
+| `ConfigurationObserver<O, S>` | явное уведомление об изменении |
 
-Минимальная модель ошибок находится в
-[`examples/basic.cpp`](../examples/basic.cpp).
+Меньший [`examples/basic.cpp`](../examples/basic.cpp) демонстрирует минимальную
+заменяемую модель ошибки.
 
-## Обобщённый алгоритм
+## Генетический алгоритм
 
 ```cpp
 template<vosp::contracts::ErrorModel Model, typename Operation>
@@ -35,9 +36,12 @@ auto guarded(Operation&& operation)
 }
 ```
 
-Нарушение концепта должно оставаться ошибкой компиляции. Не добавляйте runtime
-adapter: исправьте тип реализации. Негативные примеры находятся в
-`tests/contracts_tests.cpp`.
+Сбой концепции преднамеренно является ошибкой compile-time. Не перехватывайте её и не
+добавляйте адаптер runtime: измените тип реализации так, чтобы он соответствовал
+протоколу. Отрицательные примеры находятся в `tests/contracts_tests.cpp`.
 
-Публичны только заголовки `include/vosp/contracts`. MCF не владеет потоками,
-памятью runtime-компонентов, хранилищами или callback lifetime.
+## Стабильная граница
+
+Только заголовки под `include/vosp/contracts` являются общедоступными. MCF не владеет
+выделение памяти, потоком, хранилищем, logger или exporter время жизни. Эти обязанности
+остаются в реализации фреймворк или в корне композиции приложения.

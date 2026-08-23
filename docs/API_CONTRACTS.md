@@ -1,32 +1,32 @@
-# API contracts
+# Контракты API
 
-## Public surface
+## Общественная поверхность
 
-- `<vosp/contracts/error.hpp>`: `Error`, `Result`, and `ErrorModel` concepts;
-- `<vosp/contracts/logging.hpp>`: `LogEntry` and `LogSink` concepts;
-- `<vosp/contracts.hpp>`: supported umbrella;
-- `vosp::contracts`: exported CMake target.
+- `<vosp/contracts/error.hpp>`: концепции `Error`, `Result` и `ErrorModel`;
+- `<vosp/contracts/logging.hpp>`: концепции `LogEntry` и `LogSink`;
+- `<vosp/contracts.hpp>`: поддерживаемый зонт;
+- `vosp::contracts`: экспортированная цель CMake.
 
-## Error model
+## модель Error
 
-An error is copyable and movable and exposes `code()` and `message()`. An error
-model owns the actual `Error`, `Result<T>`, and `OperationResult` definitions and
-provides `make_error`. MCF validates that API but never supplies its
-implementation.
+Ошибка является копируемой и перемещаемой и предоставляет `code()` и `message()`. Модель
+ошибки владеет фактическими определениями `Error`, `Result<T>` и `OperationResult` и
+предоставляет `make_error`. MCF проверяет этот API, но никогда не предоставляет его
+реализацию.
 
-## Logging
+## Ведение журнала
 
-A log entry exposes an error and level. A sink structurally provides
-`bool write(const Entry&)`. Inheritance and a particular virtual interface are
-not required by MCF.
+Запись журнала предоставляет ошибку и уровень. Sink структурно реализует
+`bool write(const Entry&)`. Наследование и конкретный виртуальный интерфейс не требуются
+MCF.
 
-## Diagnostics
+## Диагностика
 
-Concept failures are compile-time API diagnostics. MCF performs no runtime
-validation, allocation, exception translation, logging, or conversion.
+Сбой концепции является диагностикой API compile-time. MCF не выполняет проверку
+runtime, выделение памяти, трансляцию исключений, логгирование или конвертацию.
 
-## Stability
+## Стабильность
 
-Breaking concept changes require a minor version increment before 1.0. New
-optional concepts may be introduced in patch releases when existing satisfying
-types remain valid.
+Изменения концепции, нарушающие совместимость, требуют увеличения минорной версии перед
+1.0.. Новые необязательные концепции могут быть введены в патч-релизах, если
+существующие удовлетворяющие типы остаются допустимыми.

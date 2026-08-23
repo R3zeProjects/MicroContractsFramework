@@ -1,81 +1,110 @@
 # MicroContractsFramework
 
-MicroContractsFramework (MCF) — header-only библиотека контрактов C++23 для
-создания заменяемых компонентов экосистемы VOSP. Она задаёт требования к API на
-этапе компиляции, но не реализует ошибки, результаты, логгеры, хранилища,
-телеметрию, конфигурацию, планирование или ввод-вывод.
+MicroContractsFramework (MCF) — header-only библиотека контрактов C++23 для создания
+заменяемых компонентов экосистемы VOSP. Она определяет требования API на этапе
+компиляции, но не реализует ошибки, результаты, реестры, sinks, persistence, хранение
+конфигурации, планирование или ввод/вывод.
 
-MEF предоставляет стандартную реализацию `Error`, `Result<T>` и логирования.
-Остальные фреймворки могут использовать MEF или любой пользовательский тип,
-который удовлетворяет тем же концептам MCF.
+MEF предоставляет стандартную production-реализацию типов `Error`, `Result<T>` и
+логгирования. MPF и будущие фреймворки могут принимать эту реализацию или любую
+пользовательскую реализацию, удовлетворяющую тем же концепциям MCF.
 
-## Зачем нужен MCF
+## Почему существует MCF
 
-Фреймворки зависят от стабильных требований, а не от конкретных классов:
+Фреймворки зависят от стабильных требований, а не от конкретных классов друг друга:
 
 ```text
                  MicroContractsFramework
-                  концепты и требования
+                 concepts / requirements
                     ^              ^
                     |              |
-          реализация MEF      шаблоны MPF/MTF/...
+          MEF implementation    MPF templates
                     \              /
-                         приложение
+                     application
 ```
 
-Это compile-time dependency inversion без runtime-реестров, оболочек,
-преобразований и адаптеров.
+Это обеспечивает compile-time инверсию зависимостей без runtime-реестров,
+объектов-обёрток, преобразований или слоёв адаптера.
 
 ## Контракты
 
-- `Error<T>` — владеющий тип ошибки;
-- `Result<R, E>` — expected-подобный результат;
-- `ErrorModel<M>` — модель ошибок и семейство `Result<T>`;
-- `LogEntry<T>` и `LogSink<S, E>` — запись и структурный sink;
-- `TelemetryRecord<T>` и `TelemetryExporter<X, T>` — телеметрия;
-- `ConfigurationSnapshot<T>`, `ConfigurationProvider<T>` и
-  `ConfigurationObserver<O, S>` — конфигурация.
+- `vosp::contracts::Error<T>` проверяет API с ошибкой владения;
+- `vosp::contracts::Result<R, E>` проверяет API результата expected-like;
+- `vosp::contracts::ErrorModel<M>` проверяет поставщика ошибок/результатов;
+- `vosp::contracts::LogEntry<T>` проверяет структурированную запись;
+- `vosp::contracts::LogSink<S, E>` проверяет структурную реализацию sink.
+- `vosp::contracts::TelemetryRecord<T>` проверяет значение принадлежащей телеметрии;
+- `vosp::contracts::TelemetryExporter<X, T>` проверяет партию exporter.
+- `vosp::contracts::ConfigurationSnapshot<T>` проверяет неизменяемый snapshot;
+- `vosp::contracts::ConfigurationProvider<T>` проверяет публикацию snapshot;
+- `vosp::contracts::ConfigurationObserver<O, S>` проверяет наблюдателей изменений.
 
-MCF не выполняет работу во время исполнения: все проверки происходят при
-компиляции. Полный исполняемый пример всех контрактов находится в
-[`examples/contracts.cpp`](examples/contracts.cpp).
+MCF не содержит конкретного класса `Error`, `Result`, `LogEntry` или `Sink`. Его
+контракт выполнения — нулевая работа runtime: все проверки являются концепциями,
+оцениваемыми на этапе компиляции. Отрицательные тесты теперь также отвергают sinks и
+телеметрию exporters, чьи возвращаемые типы не соответствуют общим контрактам.
 
-## Быстрый старт
+## Пользовательская реализация
 
 ```cpp
 #include <vosp/contracts/error.hpp>
-#include <expected>
 
-struct MyError {
+#include <expected>
+#include <string>
+#include <string_view>
+
+struct MyError
+{
     std::uint32_t code() const noexcept;
     std::string_view message() const noexcept;
 };
 
-struct MyModel {
+struct MyErrorModel
+{
     using Error = MyError;
-    template<class T> using Result = std::expected<T, Error>;
+
+    template<class T>
+    using Result = std::expected<T, Error>;
+
     using OperationResult = Result<void>;
-    static Error make_error(std::uint32_t, std::string);
+
+    static Error make_error(std::uint32_t code, std::string message);
 };
 
-static_assert(vosp::contracts::ErrorModel<MyModel>);
+static_assert(vosp::contracts::ErrorModel<MyErrorModel>);
 ```
+
+Реализация MEF удовлетворяет тому же контракту, поэтому фреймворк, параметризованный
+`ErrorModel`, может менять реализации без изменения своих алгоритмов.
 
 ## CMake
 
+Смотрите [installation guide](docs/INSTALLATION.md) для рабочих процессов дерева
+исходного кода и установленных пакетов. Компилируемые примеры и шаблоны композиции
+экосистемы собраны в [usage examples](docs/USAGE_EXAMPLES.md). [architecture
+note](docs/ARCHITECTURE.md) объясняет замену контрактов, направление зависимостей и
+операционную модель нулевого runtime.
+
 ```cmake
 find_package(vosp_contracts 0.6 REQUIRED CONFIG)
-target_link_libraries(application PRIVATE vosp::contracts)
+target_link_libraries(your_target PRIVATE vosp::contracts)
 ```
 
+Собрать и протестировать:
+
 ```sh
-cmake -S . -B build -DBUILD_TESTING=ON -DMCF_BUILD_EXAMPLES=ON
+cmake -S . -B build -DBUILD_TESTING=ON
 cmake --build build --parallel
 ctest --test-dir build --output-on-failure
 ```
 
-Подробности: [установка](docs/INSTALLATION.md),
-[полное использование](docs/USAGE_EXAMPLES.md),
-[архитектура](docs/ARCHITECTURE.md) и [API-контракты](docs/API_CONTRACTS.md).
+Поддерживаемые CI-инструментальные цепочки: GCC, Clang и MSVC. MCF требует C++23 и не
+имеет зависимости от runtime или сторонних компонентов.
 
-MCF зависит только от C++23. Лицензия MIT.
+## Правило зависимости
+
+Зависимости могут указывать на MCF. MCF никогда не зависит от MEF, MPF или другой
+реализации экосистемы. Конкретное поведение остается в фреймворк, который им владеет,
+или в корневой композиции конечного приложения.
+
+Лицензировано по лицензии MIT.

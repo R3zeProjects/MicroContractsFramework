@@ -1,6 +1,3 @@
-/** @file
- *  @brief Минимальный пример использования контрактов экосистемы VOSP.
- */
 #include <vosp/contracts.hpp>
 
 #include <cstdint>

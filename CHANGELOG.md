@@ -1,35 +1,33 @@
-# Changelog
+# Журнал изменений
 
-## 0.6.0-beta
+## 0.6.0-бета
 
-- Added structural configuration snapshot, provider, and observer contracts.
-- Kept configuration values, parsing, storage, and reload policy outside MCF.
+- Добавлены структурная конфигурация snapshot, контракты поставщика и наблюдателя.
+- Сохраненные значения конфигурации, разбор, хранение и политика перезагрузки вне MCF.
 
-## 0.5.0-beta
+## 0.5.0-бета
 
-- Added structural `TelemetryRecord` and `TelemetryExporter` contracts.
-- Kept telemetry storage, instrumentation, scheduling, and transport outside MCF.
+- Добавлены структурные контракты `TelemetryRecord` и `TelemetryExporter`.
+- Хранили телеметрию, инструментарий, планирование и транспорт за пределами MCF.
 
-## 0.4.0-beta
+## 0.4.0-бета
 
-- Replaced concrete ecosystem value types with prototype-only C++ concepts.
-- Added `Error`, `Result`, `ErrorModel`, `LogEntry`, and structural `LogSink`
-  requirements for arbitrary compatible implementations.
-- Added self-contained header and negative concept checks.
+- Заменены конкретные типы значений экосистемы на концепции C++ только для прототипа.
+- Добавлены требования `Error`, `Result`, `ErrorModel`, `LogEntry` и структурные требования `LogSink` для произвольных совместимых реализаций.
+- Добавлены автономный заголовок и проверки отрицательных концепций.
 
-## 0.3.0-beta
+## 0.3.0-бета
 
-- Restricted MCF to value schemas, aliases, concepts, and pure interfaces.
-- Moved formatting, hashing, and exception-translation behavior back to MEF.
+- Ограничил MCF схемами значений, псевдонимами, концепциями и чистыми интерфейсами.
+- Перенес форматирование, хэширование и обработку исключений обратно в MEF.
 
-## 0.2.0-beta
+## 0.2.0-бета
 
-- Added direct `Level`, `LogEntry`, `ILogSink`, and `SinkType` contracts.
-- Enabled independent frameworks to produce and consume logs without depending
-  on a concrete logger implementation or an integration adapter.
+- Добавлены прямые контракты `Level`, `LogEntry`, `ILogSink` и `SinkType`.
+- Разрешено независимому фреймворки создавать и потреблять логи без зависимости от
+  конкретной реализации logger или интеграционного адаптера.
 
-## 0.1.0-beta
+## 0.1.0-бета
 
-- Added the dependency-neutral `vosp::error` value contracts.
-- Added header-only CMake package target `vosp::contracts`.
-- Added Windows, GCC, Clang, unit, and installed-package CI contracts.
+- Добавлены нейтральные к зависимостям договоры значений `vosp::error`. - Добавлен пакет header-only CMake для цели `vosp::contracts`.
+- Добавлены Windows, GCC, Clang, подразделение и контракты установленного пакета CI.
