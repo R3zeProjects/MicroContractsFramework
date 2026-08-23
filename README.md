@@ -83,6 +83,8 @@ by `ErrorModel` can switch implementations without changing its algorithms.
 See the [installation guide](docs/INSTALLATION.md) for source-tree and installed
 package workflows. Compilable examples and ecosystem composition patterns are
 collected in [usage examples](docs/USAGE_EXAMPLES.md).
+The [architecture note](docs/ARCHITECTURE.md) explains contract substitution,
+dependency direction, and the zero-runtime operating model.
 
 ```cmake
 find_package(vosp_contracts 0.6 REQUIRED CONFIG)

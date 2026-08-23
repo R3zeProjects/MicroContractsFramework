@@ -7,6 +7,27 @@ frameworks. It contains concepts and version metadata, but no concrete domain
 implementation, runtime state, allocation policy, I/O, worker, or global
 registry.
 
+## Operating principles
+
+MCF applies **structural contracts at compile time**. A consumer passes a type
+to a framework template; the selected concept checks the required expressions,
+their constness, and their exact result semantics. A matching type is composed
+directly into the algorithm. A mismatch stops compilation at the boundary
+instead of becoming a runtime branch or failed cast.
+
+```text
+candidate type -> concept substitution -> required operations checked
+                                      -> accepted: direct static composition
+                                      -> rejected: compile-time diagnostic
+```
+
+The contracts describe capability, not ancestry. Implementations do not derive
+from MCF classes and MCF does not create, own, allocate, schedule, or destroy
+their objects. Including MCF therefore adds no runtime state and dependency
+arrows always point from concrete frameworks to contracts. Exact expected-like
+result requirements keep failures explicit while allowing the concrete error
+representation to be replaced.
+
 ## Dependency direction
 
 ```text
