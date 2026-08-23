@@ -10,16 +10,16 @@ MCF содержит протоколы compile-time, а не реализаци
 
 | Контракт | Требуемая роль |
 |---|---|
-| `Error<T>` | владение кодом и значением сообщения |
+| `Error<T>` | Владение кодом и значением сообщения |
 | `Result<R, E>` | expected-like канал успеха/ошибки |
-| `ErrorModel<M>` | фабрика ошибок и семейство `Result<T>` |
-| `LogEntry<T>` | структурированный уровень и значение ошибки |
-| `LogSink<S, E>` | структурный `bool write(const E&)` sink |
-| `TelemetryRecord<T>` | именной, с отметкой времени учетный запись |
-| `TelemetryExporter<X, T>` | пакет exporter |
-| `ConfigurationSnapshot<T>` | неизменяемая ревизия и поиск по ключу |
-| `ConfigurationProvider<T>` | совместное приобретение snapshot |
-| `ConfigurationObserver<O, S>` | явное уведомление об изменении |
+| `ErrorModel<M>` | Фабрика ошибок и семейство `Result<T>` |
+| `LogEntry<T>` | Структурированный уровень и значение ошибки |
+| `LogSink<S, E>` | Структурный `bool write(const E&)` sink |
+| `TelemetryRecord<T>` | Именной, с отметкой времени учетный запись |
+| `TelemetryExporter<X, T>` | Пакет exporter |
+| `ConfigurationSnapshot<T>` | Неизменяемая ревизия и поиск по ключу |
+| `ConfigurationProvider<T>` | Совместное приобретение snapshot |
+| `ConfigurationObserver<O, S>` | Явное уведомление об изменении |
 
 Меньший [`examples/basic.cpp`](../examples/basic.cpp) демонстрирует минимальную
 заменяемую модель ошибки.
