@@ -1,12 +1,12 @@
-# Installation
+# Установка
 
-## Requirements
+## Требования
 
-- CMake 3.25 or newer;
-- GCC, Clang, or MSVC with C++23 support;
-- a standard library with concepts, `std::expected`, and `std::span`.
+- CMake 3.25 или новее;
+- GCC, Clang или MSVC с поддержкой C++23;
+- стандартная библиотека с concepts, `std::expected` и `std::span`.
 
-## Build from source
+## Сборка из исходников
 
 ```sh
 git clone https://github.com/R3zeProjects/MicroContractsFramework.git
@@ -16,9 +16,10 @@ cmake --build build/mcf --parallel
 ctest --test-dir build/mcf --output-on-failure
 ```
 
-For multi-config generators, pass `--config Release` to build, test and install.
+Для multi-config генераторов передавайте `--config Release` при сборке,
+тестировании и установке.
 
-## Install and consume
+## Установка и подключение
 
 ```sh
 cmake --install build/mcf --prefix install
@@ -29,12 +30,12 @@ find_package(vosp_contracts 0.6 REQUIRED CONFIG)
 target_link_libraries(application PRIVATE vosp::contracts)
 ```
 
-Configure the consumer with `-DCMAKE_PREFIX_PATH=/absolute/path/to/install`.
-MCF is header-only; linking the target propagates include paths, C++23 and
-warnings. No runtime library is installed.
+Передайте consumer-проекту
+`-DCMAKE_PREFIX_PATH=/абсолютный/путь/install`. MCF является header-only:
+target передаёт include paths, требование C++23 и предупреждения компилятора.
 
-## Verify the examples
+## Проверка примеров
 
-Run `MicroContractsFrameworkExample` and
-`MicroContractsFrameworkContractsExample` from the build directory. Disable
-them in dependency builds with `-DMCF_BUILD_EXAMPLES=OFF`.
+Запустите `MicroContractsFrameworkExample` и
+`MicroContractsFrameworkContractsExample` из директории сборки. При встраивании
+как зависимости отключите их через `-DMCF_BUILD_EXAMPLES=OFF`.

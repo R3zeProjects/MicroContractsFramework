@@ -1,3 +1,6 @@
+/** @file
+ *  @brief Полная демонстрация публичных концептов и контрактных типов.
+ */
 #include <vosp/contracts.hpp>
 
 #include <chrono>
