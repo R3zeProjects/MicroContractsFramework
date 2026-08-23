@@ -8,6 +8,8 @@ include(CTest)
 include(GNUInstallDirs)
 include(CMakePackageConfigHelpers)
 
+option(MCF_BUILD_EXAMPLES "Build MCF usage examples" ON)
+
 add_library(MicroContractsFramework INTERFACE)
 add_library(vosp::contracts ALIAS MicroContractsFramework)
 set_target_properties(MicroContractsFramework PROPERTIES EXPORT_NAME contracts)
@@ -35,6 +37,19 @@ if(BUILD_TESTING)
     add_executable(MicroContractsFrameworkTests tests/contracts_tests.cpp)
     target_link_libraries(MicroContractsFrameworkTests PRIVATE MicroContractsFramework)
     add_test(NAME MicroContractsFramework.Tests COMMAND MicroContractsFrameworkTests)
+endif()
+
+if(MCF_BUILD_EXAMPLES)
+    add_executable(MicroContractsFrameworkExample examples/basic.cpp)
+    target_link_libraries(MicroContractsFrameworkExample PRIVATE MicroContractsFramework)
+    add_executable(MicroContractsFrameworkContractsExample examples/contracts.cpp)
+    target_link_libraries(MicroContractsFrameworkContractsExample PRIVATE MicroContractsFramework)
+    if(BUILD_TESTING)
+        add_test(NAME MicroContractsFramework.Example.Basic
+            COMMAND MicroContractsFrameworkExample)
+        add_test(NAME MicroContractsFramework.Example.Contracts
+            COMMAND MicroContractsFrameworkContractsExample)
+    endif()
 endif()
 
 install(TARGETS MicroContractsFramework EXPORT vosp_contractsTargets)
