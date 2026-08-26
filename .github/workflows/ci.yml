@@ -68,9 +68,75 @@ jobs:
       - name: Consume installed package
         run: |
           cmake -S tests/package_consumer -B consumer \
-            -DCMAKE_PREFIX_PATH="$PWD/install"
+            -DCMAKE_PREFIX_PATH="$PWD/install" \
+            -DCMAKE_CXX_COMPILER=clang++
           cmake --build consumer --parallel
           ./consumer/vosp_contracts_package_consumer
+
+  ecosystem-packages:
+    name: Ecosystem packages (${{ matrix.name }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: Linux GCC
+            os: ubuntu-latest
+            compiler: g++
+          - name: Linux Clang
+            os: ubuntu-latest
+            compiler: clang++
+          - name: Windows MSVC
+            os: windows-latest
+            compiler: ''
+    steps:
+      - name: Checkout MCF under test
+        uses: actions/checkout@v5
+      - name: Checkout MEF
+        uses: actions/checkout@v5
+        with:
+          repository: R3zeProjects/MicroErrorFramework
+          path: .ecosystem/MicroErrorFramework
+      - name: Checkout MPF
+        uses: actions/checkout@v5
+        with:
+          repository: R3zeProjects/MicroPersistenceFramework
+          path: .ecosystem/MicroPersistenceFramework
+      - name: Checkout MTF
+        uses: actions/checkout@v5
+        with:
+          repository: R3zeProjects/MicroTelemetryFramework
+          path: .ecosystem/MicroTelemetryFramework
+      - name: Checkout MConfigF
+        uses: actions/checkout@v5
+        with:
+          repository: R3zeProjects/MicroConfigurationFramework
+          path: .ecosystem/MicroConfigurationFramework
+      - name: Checkout MRF
+        uses: actions/checkout@v5
+        with:
+          repository: R3zeProjects/MicroResilienceFramework
+          path: .ecosystem/MicroResilienceFramework
+      - name: Checkout MWF
+        uses: actions/checkout@v5
+        with:
+          repository: R3zeProjects/MicroWorkflowFramework
+          path: .ecosystem/MicroWorkflowFramework
+      - name: Verify dependency direction
+        shell: pwsh
+        run: >-
+          .github/scripts/test-ecosystem-boundaries.ps1
+          -ContractsSource '${{ github.workspace }}'
+          -FrameworksRoot '${{ github.workspace }}/.ecosystem'
+      - name: Install and consume all packages
+        shell: pwsh
+        run: >-
+          .github/scripts/test-ecosystem-packages.ps1
+          -ContractsSource '${{ github.workspace }}'
+          -FrameworksRoot '${{ github.workspace }}/.ecosystem'
+          -BuildRoot '${{ runner.temp }}/vosp-ecosystem'
+          -CxxCompiler '${{ matrix.compiler }}'
 
   static-analysis:
     name: Linux clang-tidy
