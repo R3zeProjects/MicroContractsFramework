@@ -123,6 +123,11 @@ jobs:
         with:
           repository: R3zeProjects/MicroWorkflowFramework
           path: .ecosystem/MicroWorkflowFramework
+      - name: Checkout MSF
+        uses: actions/checkout@v5
+        with:
+          repository: R3zeProjects/MicroServiceFramework
+          path: .ecosystem/MicroServiceFramework
       - name: Verify dependency direction
         shell: pwsh
         run: >-

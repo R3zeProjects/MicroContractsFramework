@@ -66,6 +66,8 @@ Install-Framework 'mrf' (Join-Path $frameworks 'MicroResilienceFramework') @(
     '-DMRF_BUILD_EXAMPLES=OFF', '-DMRF_FETCH_CONTRACTS=OFF')
 Install-Framework 'mwf' (Join-Path $frameworks 'MicroWorkflowFramework') @(
     '-DMWF_BUILD_EXAMPLES=OFF', '-DMWF_FETCH_CONTRACTS=OFF')
+Install-Framework 'msf' (Join-Path $frameworks 'MicroServiceFramework') @(
+    '-DMSF_BUILD_EXAMPLES=OFF', '-DMSF_FETCH_CONTRACTS=OFF')
 
 $consumerBuild = Join-Path $build 'consumer'
 $consumerConfigure = @(

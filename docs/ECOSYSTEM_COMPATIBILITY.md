@@ -16,6 +16,7 @@ one C++23 composition:
 | MicroConfigurationFramework | 0.1.x beta | `mconfig` | `vosp::configuration` |
 | MicroResilienceFramework | 0.1.x beta | `mrf` | `vosp::resilience` |
 | MicroWorkflowFramework | 0.1.x beta | `mwf` | `vosp::workflow` |
+| MicroServiceFramework | 0.1.x beta | `msf` | `vosp::service` |
 
 Patch releases preserve source compatibility. Before 1.0, a framework may make
 a documented source-incompatible change in a minor release. Applications should
@@ -34,7 +35,7 @@ compile-time boundary without adding a runtime dependency. The gate:
 5. rejects direct runtime-to-runtime includes in every core `include/` and `src/`
    tree and rejects runtime dependencies in the MCF build graph;
 6. compiles and runs configuration, error, logging, persistence, telemetry,
-   resilience, and child-process workflow operations together;
+   resilience, child-process workflow, and in-process service lifecycle operations together;
 7. covers valid and invalid configuration, persistence rejection, retry recovery,
    direct export, bounded asynchronous drain, shutdown rejection, and non-zero
    child-process completion;
@@ -59,7 +60,7 @@ Dependency direction can be checked without building:
   -FrameworksRoot C:/src/vosp
 ```
 
-`FrameworksRoot` must contain the six runtime repository directories. The build
+`FrameworksRoot` must contain the seven runtime repository directories. The build
 directory must be disposable; package installation and the downstream consumer
 are generated below it.
 
@@ -78,3 +79,6 @@ are generated below it.
 The gate proves compatibility of the tested package set; it does not promise ABI
 stability across releases or replace each framework's unit, sanitizer, fuzz, and
 stress suites.
+
+External-project scope and benchmark interpretation are documented separately in
+[the ecosystem comparison](ECOSYSTEM_COMPARISON.md).

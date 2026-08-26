@@ -20,8 +20,8 @@ target_include_directories(MicroContractsFramework INTERFACE
 )
 
 target_compile_options(MicroContractsFramework INTERFACE
-    $<$<COMPILE_LANG_AND_ID:CXX,MSVC>:/W4;/permissive->
-    $<$<COMPILE_LANG_AND_ID:CXX,GNU,Clang,AppleClang>:-Wall;-Wextra;-Wpedantic>
+    $<BUILD_INTERFACE:$<$<COMPILE_LANG_AND_ID:CXX,MSVC>:/W4;/permissive->>
+    $<BUILD_INTERFACE:$<$<COMPILE_LANG_AND_ID:CXX,GNU,Clang,AppleClang>:-Wall;-Wextra;-Wpedantic>>
 )
 
 if(BUILD_TESTING)
