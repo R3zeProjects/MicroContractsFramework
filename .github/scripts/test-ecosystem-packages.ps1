@@ -43,6 +43,7 @@ function Install-Framework {
     $configure = @(
         '-S', $Source,
         '-B', $frameworkBuild,
+        '-DCMAKE_BUILD_TYPE=Release',
         '-DBUILD_TESTING=OFF',
         "-DCMAKE_INSTALL_PREFIX=$prefix",
         "-DCMAKE_PREFIX_PATH=$prefix"
@@ -73,6 +74,7 @@ $consumerBuild = Join-Path $build 'consumer'
 $consumerConfigure = @(
     '-S', (Join-Path $contracts 'tests/ecosystem_consumer'),
     '-B', $consumerBuild,
+    '-DCMAKE_BUILD_TYPE=Release',
     "-DCMAKE_PREFIX_PATH=$prefix"
 ) + $compilerOption
 Invoke-CMake @consumerConfigure
