@@ -19,11 +19,10 @@ target_include_directories(MicroContractsFramework INTERFACE
     $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
 )
 
-if(MSVC)
-    target_compile_options(MicroContractsFramework INTERFACE /W4 /permissive-)
-else()
-    target_compile_options(MicroContractsFramework INTERFACE -Wall -Wextra -Wpedantic)
-endif()
+target_compile_options(MicroContractsFramework INTERFACE
+    $<$<COMPILE_LANG_AND_ID:CXX,MSVC>:/W4;/permissive->
+    $<$<COMPILE_LANG_AND_ID:CXX,GNU,Clang,AppleClang>:-Wall;-Wextra;-Wpedantic>
+)
 
 if(BUILD_TESTING)
     add_library(MicroContractsFrameworkHeaderContracts OBJECT

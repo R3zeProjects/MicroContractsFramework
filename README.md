@@ -85,6 +85,8 @@ package workflows. Compilable examples and ecosystem composition patterns are
 collected in [usage examples](docs/USAGE_EXAMPLES.md).
 The [architecture note](docs/ARCHITECTURE.md) explains contract substitution,
 dependency direction, and the zero-runtime operating model.
+The [ecosystem compatibility matrix](docs/ECOSYSTEM_COMPATIBILITY.md) records
+the package lines tested together and explains the Windows/Linux integration gate.
 
 ```cmake
 find_package(vosp_contracts 0.6 REQUIRED CONFIG)
@@ -107,5 +109,17 @@ runtime or third-party dependency.
 Dependencies may point to MCF. MCF never depends on MEF, MPF, or another
 ecosystem implementation. Concrete behavior remains in the framework that owns
 it or in the final application composition root.
+
+## Ecosystem verification and language branches
+
+MCF owns the ecosystem compatibility gate, not the runtime composition. The gate
+installs all seven packages independently, rejects forbidden core dependencies,
+and runs success, failure, retry, asynchronous drain, and child-process scenarios
+through a downstream `find_package` consumer. See the
+[compatibility matrix](docs/ECOSYSTEM_COMPATIBILITY.md).
+
+`main` contains the canonical source and English documentation. `main-ru`
+contains identical source code with Russian Markdown documentation. CI rejects
+non-documentation drift between the two branches.
 
 Licensed under the MIT License.

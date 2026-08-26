@@ -1,5 +1,14 @@
 # Changelog
 
+## Unreleased
+
+- Added a Windows/Linux ecosystem gate that installs all seven frameworks as
+  independent CMake packages and validates a separate downstream consumer.
+- Added a dependency-direction check for all public and implementation source trees.
+- Expanded the consumer with version contracts, asynchronous drain, retry,
+  rejected persistence/configuration, and non-zero child-process scenarios.
+- Documented the package compatibility matrix and failure-diagnosis policy.
+
 ## 0.6.0-beta
 
 - Added structural configuration snapshot, provider, and observer contracts.
