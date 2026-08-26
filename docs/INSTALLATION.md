@@ -25,7 +25,7 @@ cmake --install build/mcf --prefix install
 ```
 
 ```cmake
-find_package(vosp_contracts 0.6 REQUIRED CONFIG)
+find_package(vosp_contracts 0.7 REQUIRED CONFIG)
 target_link_libraries(application PRIVATE vosp::contracts)
 ```
 

@@ -2,12 +2,19 @@
 
 ## Unreleased
 
-- Added a Windows/Linux ecosystem gate that installs all seven frameworks as
+- Added a Windows/Linux ecosystem gate that installs all eight frameworks as
   independent CMake packages and validates a separate downstream consumer.
 - Added a dependency-direction check for all public and implementation source trees.
 - Expanded the consumer with version contracts, asynchronous drain, retry,
   rejected persistence/configuration, and non-zero child-process scenarios.
 - Documented the package compatibility matrix and failure-diagnosis policy.
+
+## 0.7.0-beta
+
+- Added structural contracts for versioned protocol messages and value codecs.
+- Added replaceable framing and incremental stream-decoder contracts.
+- Kept sockets, reconnect policy, cryptography, compression, and plugin loading
+  outside MCF.
 
 ## 0.6.0-beta
 

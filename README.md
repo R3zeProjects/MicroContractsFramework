@@ -39,6 +39,10 @@ wrapper objects, conversions, or adapter layers.
 - `vosp::contracts::ConfigurationSnapshot<T>` checks an immutable snapshot;
 - `vosp::contracts::ConfigurationProvider<T>` checks snapshot publication;
 - `vosp::contracts::ConfigurationObserver<O, S>` checks change observers.
+- `vosp::contracts::ProtocolMessage<T>` checks immutable message views;
+- `vosp::contracts::ProtocolCodec<C, V, M>` checks value codecs;
+- `vosp::contracts::ProtocolFramer<F, V, M>` checks message framing;
+- `vosp::contracts::ProtocolStreamDecoder<D, V, M>` checks incremental decoding.
 
 MCF contains no concrete `Error`, `Result`, `LogEntry`, or `Sink` class.
 Its performance contract is zero runtime work: all checks are concepts evaluated
@@ -91,7 +95,7 @@ The [ecosystem comparison](docs/ECOSYSTEM_COMPARISON.md) separates reproducible
 same-work benchmarks from feature-only comparisons with established projects.
 
 ```cmake
-find_package(vosp_contracts 0.6 REQUIRED CONFIG)
+find_package(vosp_contracts 0.7 REQUIRED CONFIG)
 target_link_libraries(your_target PRIVATE vosp::contracts)
 ```
 
