@@ -56,11 +56,19 @@ jobs:
   installed-package:
     name: Installed package
     runs-on: ubuntu-latest
+    env:
+      CXXFLAGS: -stdlib=libc++ -fexperimental-library
+      LDFLAGS: -stdlib=libc++ -fexperimental-library
     steps:
       - uses: actions/checkout@v5
+      - name: Install Clang standard library
+        run: >-
+          .github/scripts/install-apt-packages.sh
+          clang libc++-dev libc++abi-dev
       - name: Configure and install
         run: |
-          cmake -S . -B build -DBUILD_TESTING=OFF -DCMAKE_BUILD_TYPE=Release
+          cmake -S . -B build -DBUILD_TESTING=OFF -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_CXX_COMPILER=clang++
           cmake --build build --parallel
           cmake --install build --prefix "$PWD/install"
           grep -F 'set(PACKAGE_VERSION "0.6.0")' \
@@ -84,15 +92,26 @@ jobs:
           - name: Linux GCC
             os: ubuntu-latest
             compiler: g++
+            cxxflags: ''
           - name: Linux Clang
             os: ubuntu-latest
             compiler: clang++
+            cxxflags: -stdlib=libc++ -fexperimental-library
           - name: Windows MSVC
             os: windows-latest
             compiler: ''
+            cxxflags: ''
+    env:
+      CXXFLAGS: ${{ matrix.cxxflags }}
+      LDFLAGS: ${{ matrix.cxxflags }}
     steps:
       - name: Checkout MCF under test
         uses: actions/checkout@v5
+      - name: Install Clang standard library
+        if: matrix.name == 'Linux Clang'
+        run: >-
+          .github/scripts/install-apt-packages.sh
+          clang libc++-dev libc++abi-dev
       - name: Checkout MEF
         uses: actions/checkout@v5
         with:
