@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.25)
 
-project(MicroContractsFramework VERSION 0.6.0 LANGUAGES CXX)
+project(MicroContractsFramework VERSION 0.7.0 LANGUAGES CXX)
 
 set(MICRO_CONTRACTS_FRAMEWORK_PRERELEASE "beta")
 
@@ -20,8 +20,8 @@ target_include_directories(MicroContractsFramework INTERFACE
 )
 
 target_compile_options(MicroContractsFramework INTERFACE
-    $<$<COMPILE_LANG_AND_ID:CXX,MSVC>:/W4;/permissive->
-    $<$<COMPILE_LANG_AND_ID:CXX,GNU,Clang,AppleClang>:-Wall;-Wextra;-Wpedantic>
+    $<BUILD_INTERFACE:$<$<COMPILE_LANG_AND_ID:CXX,MSVC>:/W4;/permissive->>
+    $<BUILD_INTERFACE:$<$<COMPILE_LANG_AND_ID:CXX,GNU,Clang,AppleClang>:-Wall;-Wextra;-Wpedantic>>
 )
 
 if(BUILD_TESTING)
@@ -29,6 +29,7 @@ if(BUILD_TESTING)
         tests/header_contracts/configuration_header.cpp
         tests/header_contracts/error_header.cpp
         tests/header_contracts/logging_header.cpp
+        tests/header_contracts/protocol_header.cpp
         tests/header_contracts/telemetry_header.cpp)
     target_link_libraries(MicroContractsFrameworkHeaderContracts
         PRIVATE MicroContractsFramework)

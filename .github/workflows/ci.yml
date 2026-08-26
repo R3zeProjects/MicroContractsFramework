@@ -56,14 +56,22 @@ jobs:
   installed-package:
     name: Installed package
     runs-on: ubuntu-latest
+    env:
+      CXXFLAGS: -stdlib=libc++ -fexperimental-library
+      LDFLAGS: -stdlib=libc++ -fexperimental-library
     steps:
       - uses: actions/checkout@v5
+      - name: Install Clang standard library
+        run: >-
+          .github/scripts/install-apt-packages.sh
+          clang libc++-dev libc++abi-dev
       - name: Configure and install
         run: |
-          cmake -S . -B build -DBUILD_TESTING=OFF -DCMAKE_BUILD_TYPE=Release
+          cmake -S . -B build -DBUILD_TESTING=OFF -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_CXX_COMPILER=clang++
           cmake --build build --parallel
           cmake --install build --prefix "$PWD/install"
-          grep -F 'set(PACKAGE_VERSION "0.6.0")' \
+          grep -F 'set(PACKAGE_VERSION "0.7.0")' \
             install/lib/cmake/vosp_contracts/vosp_contractsConfigVersion.cmake
       - name: Consume installed package
         run: |
@@ -84,20 +92,36 @@ jobs:
           - name: Linux GCC
             os: ubuntu-latest
             compiler: g++
+            cxxflags: ''
           - name: Linux Clang
             os: ubuntu-latest
             compiler: clang++
+            cxxflags: -stdlib=libc++ -fexperimental-library
           - name: Windows MSVC
             os: windows-latest
             compiler: ''
+            cxxflags: ''
+    env:
+      CXXFLAGS: ${{ matrix.cxxflags }}
+      LDFLAGS: ${{ matrix.cxxflags }}
     steps:
       - name: Checkout MCF under test
         uses: actions/checkout@v5
+      - name: Install Clang standard library
+        if: matrix.name == 'Linux Clang'
+        run: >-
+          .github/scripts/install-apt-packages.sh
+          clang libc++-dev libc++abi-dev
       - name: Checkout MEF
         uses: actions/checkout@v5
         with:
           repository: R3zeProjects/MicroErrorFramework
           path: .ecosystem/MicroErrorFramework
+      - name: Checkout MProtocolF
+        uses: actions/checkout@v5
+        with:
+          repository: R3zeProjects/MicroProtocolFramework
+          path: .ecosystem/MicroProtocolFramework
       - name: Checkout MPF
         uses: actions/checkout@v5
         with:
@@ -123,6 +147,11 @@ jobs:
         with:
           repository: R3zeProjects/MicroWorkflowFramework
           path: .ecosystem/MicroWorkflowFramework
+      - name: Checkout MSF
+        uses: actions/checkout@v5
+        with:
+          repository: R3zeProjects/MicroServiceFramework
+          path: .ecosystem/MicroServiceFramework
       - name: Verify dependency direction
         shell: pwsh
         run: >-

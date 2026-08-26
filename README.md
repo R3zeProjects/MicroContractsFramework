@@ -38,6 +38,11 @@ MEF предоставляет стандартную production-реализа�
 - `vosp::contracts::ConfigurationSnapshot<T>` проверяет неизменяемый snapshot;
 - `vosp::contracts::ConfigurationProvider<T>` проверяет публикацию snapshot;
 - `vosp::contracts::ConfigurationObserver<O, S>` проверяет наблюдателей изменений.
+- `vosp::contracts::ProtocolMessage<T>` проверяет неизменяемые представления сообщений;
+- `vosp::contracts::ProtocolCodec<C, V, M>` проверяет кодеки значений;
+- `vosp::contracts::ProtocolFramer<F, V, M>` проверяет фрейминг сообщений;
+- `vosp::contracts::ProtocolStreamDecoder<D, V, M>` проверяет инкрементальное
+  декодирование потока.
 
 MCF не содержит конкретного класса `Error`, `Result`, `LogEntry` или `Sink`. Его
 контракт выполнения — нулевая работа runtime: все проверки являются концепциями,
@@ -86,9 +91,11 @@ note](docs/ARCHITECTURE.md) объясняет замену контрактов
 операционную модель нулевого runtime.
 [Матрица совместимости экосистемы](docs/ECOSYSTEM_COMPATIBILITY.md) фиксирует
 совместно проверяемые линии пакетов и описывает integration gate для Windows/Linux.
+[Сравнение экосистемы](docs/ECOSYSTEM_COMPARISON.md) отделяет воспроизводимые
+benchmark одинаковой работы от функционального сравнения с известными проектами.
 
 ```cmake
-find_package(vosp_contracts 0.6 REQUIRED CONFIG)
+find_package(vosp_contracts 0.7 REQUIRED CONFIG)
 target_link_libraries(your_target PRIVATE vosp::contracts)
 ```
 
@@ -112,7 +119,7 @@ ctest --test-dir build --output-on-failure
 ## Проверка экосистемы и языковые ветки
 
 MCF владеет gate совместимости экосистемы, но не runtime-композицией. Gate независимо
-устанавливает все семь пакетов, запрещает недопустимые зависимости в core и запускает
+устанавливает все девять пакетов, запрещает недопустимые зависимости в core и запускает
 успешные и отказные сценарии, retry, асинхронный drain и дочерние процессы через
 downstream consumer на основе `find_package`. См.
 [матрицу совместимости](docs/ECOSYSTEM_COMPATIBILITY.md).

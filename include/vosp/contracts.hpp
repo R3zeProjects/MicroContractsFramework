@@ -5,6 +5,7 @@
 #include <vosp/contracts/configuration.hpp>
 #include <vosp/contracts/error.hpp>
 #include <vosp/contracts/logging.hpp>
+#include <vosp/contracts/protocol.hpp>
 #include <vosp/contracts/telemetry.hpp>
 #include <vosp/contracts/version.hpp>
 

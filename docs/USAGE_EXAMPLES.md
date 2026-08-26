@@ -20,6 +20,10 @@ MCF содержит протоколы compile-time, а не реализаци
 | `ConfigurationSnapshot<T>` | Неизменяемая ревизия и поиск по ключу |
 | `ConfigurationProvider<T>` | Совместное приобретение snapshot |
 | `ConfigurationObserver<O, S>` | Явное уведомление об изменении |
+| `ProtocolMessage<T>` | Неизменяемое представление версионированного сообщения |
+| `ProtocolCodec<C, V, M>` | Кодек значения в байты |
+| `ProtocolFramer<F, V, M>` | Ограниченный фрейминг сообщений |
+| `ProtocolStreamDecoder<D, V, M>` | Инкрементальное декодирование потока |
 
 Меньший [`examples/basic.cpp`](../examples/basic.cpp) демонстрирует минимальную
 заменяемую модель ошибки.
