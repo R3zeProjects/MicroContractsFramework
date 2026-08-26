@@ -20,6 +20,10 @@ The compilable [`examples/contracts.cpp`](../examples/contracts.cpp) covers:
 | `ConfigurationSnapshot<T>` | immutable revision and key lookup |
 | `ConfigurationProvider<T>` | shared snapshot acquisition |
 | `ConfigurationObserver<O, S>` | explicit change notification |
+| `ProtocolMessage<T>` | immutable versioned message view |
+| `ProtocolCodec<C, V, M>` | value-to-bytes codec |
+| `ProtocolFramer<F, V, M>` | bounded message framing |
+| `ProtocolStreamDecoder<D, V, M>` | incremental stream decoding |
 
 The smaller [`examples/basic.cpp`](../examples/basic.cpp) demonstrates the
 minimum replaceable error model.

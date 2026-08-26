@@ -9,7 +9,8 @@ one C++23 composition:
 
 | Framework | Version line | CMake package | Imported target |
 | --- | --- | --- | --- |
-| MicroContractsFramework | 0.6.x beta | `vosp_contracts` | `vosp::contracts` |
+| MicroContractsFramework | 0.7.x beta | `vosp_contracts` | `vosp::contracts` |
+| MicroProtocolFramework | 0.1.x beta | `mprotocol` | `vosp::protocol` |
 | MicroErrorFramework | 0.6.x beta | `vosp` | `vosp::vosp` |
 | MicroPersistenceFramework | 0.3.x beta | `mpf` | `vosp::persistence` |
 | MicroTelemetryFramework | 0.1.1+ beta | `mtf` | `vosp::telemetry` |
@@ -34,8 +35,9 @@ compile-time boundary without adding a runtime dependency. The gate:
 4. configures a separate consumer exclusively through `find_package`;
 5. rejects direct runtime-to-runtime includes in every core `include/` and `src/`
    tree and rejects runtime dependencies in the MCF build graph;
-6. compiles and runs configuration, error, logging, persistence, telemetry,
-   resilience, child-process workflow, and in-process service lifecycle operations together;
+6. compiles and runs configuration, error, logging, protocol framing, persistence,
+   telemetry, resilience, child-process workflow, and in-process service lifecycle
+   operations together;
 7. covers valid and invalid configuration, persistence rejection, retry recovery,
    direct export, bounded asynchronous drain, shutdown rejection, and non-zero
    child-process completion;
@@ -60,7 +62,7 @@ Dependency direction can be checked without building:
   -FrameworksRoot C:/src/vosp
 ```
 
-`FrameworksRoot` must contain the seven runtime repository directories. The build
+`FrameworksRoot` must contain the eight runtime repository directories. The build
 directory must be disposable; package installation and the downstream consumer
 are generated below it.
 

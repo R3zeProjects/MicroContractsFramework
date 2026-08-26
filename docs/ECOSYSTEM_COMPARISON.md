@@ -54,7 +54,7 @@ Raw alternating-order samples are stored in the owning repositories:
 
 ## Conclusions allowed by the evidence
 
-- The eight installed packages compose through their public CMake targets and
+- The nine installed packages compose through their public CMake targets and
   MCF contracts without runtime-to-runtime core dependencies.
 - The measured hot paths are competitive on the documented machine and exact
   workloads.

@@ -55,6 +55,8 @@ function Install-Framework {
 }
 
 Install-Framework 'mcf' $contracts @('-DMCF_BUILD_EXAMPLES=OFF')
+Install-Framework 'mprotocol' (Join-Path $frameworks 'MicroProtocolFramework') @(
+    '-DMPROTOCOL_BUILD_EXAMPLES=OFF', '-DMPROTOCOL_FETCH_CONTRACTS=OFF')
 Install-Framework 'mef' (Join-Path $frameworks 'MicroErrorFramework') @(
     '-DMEF_BUILD_EXAMPLES=OFF', '-DMEF_FETCH_CONTRACTS=OFF')
 Install-Framework 'mpf' (Join-Path $frameworks 'MicroPersistenceFramework') @(

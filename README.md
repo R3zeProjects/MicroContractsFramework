@@ -119,7 +119,7 @@ it or in the final application composition root.
 ## Ecosystem verification and language branches
 
 MCF owns the ecosystem compatibility gate, not the runtime composition. The gate
-installs all eight packages independently, rejects forbidden core dependencies,
+installs all nine packages independently, rejects forbidden core dependencies,
 and runs success, failure, retry, asynchronous drain, and child-process scenarios
 through a downstream `find_package` consumer. See the
 [compatibility matrix](docs/ECOSYSTEM_COMPATIBILITY.md).

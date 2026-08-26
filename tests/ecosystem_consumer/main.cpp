@@ -2,6 +2,7 @@
 #include <vosp/configuration.hpp>
 #include <vosp/contracts.hpp>
 #include <vosp/persistence.hpp>
+#include <vosp/protocol.hpp>
 #include <vosp/resilience.hpp>
 #include <vosp/service.hpp>
 #include <vosp/telemetry.hpp>
@@ -23,6 +24,7 @@
 namespace
 {
 static_assert(vosp::contracts::version::major == 0);
+static_assert(vosp::protocol::version::api == "0.1.0-beta");
 static_assert(vosp::version::minor == 6);
 static_assert(vosp::persistence::version::minor == 3);
 static_assert(vosp::telemetry::version::patch >= 1);
@@ -187,6 +189,32 @@ template <typename Pipeline> class ConfigurationObserver
            sink.accepted() == 1 && stats.exported == 1 && journal.size() == 2;
 }
 
+[[nodiscard]] bool validate_protocol_plane()
+{
+    vosp::protocol::Utf8Codec text;
+    auto payload = text.encode(std::string{"ecosystem.protocol"});
+    if (!payload)
+    {
+        return false;
+    }
+
+    vsp::Protocol protocol;
+    auto frame = protocol.encode(vsp::ProtocolMessage{
+        vsp::ProtocolVersion{1, 0}, 7, 42, std::move(*payload)});
+    if (!frame)
+    {
+        return false;
+    }
+
+    const auto decoded = protocol.decode(*frame);
+    if (!decoded || decoded->type() != 7 || decoded->correlation_id() != 42)
+    {
+        return false;
+    }
+    const auto message = text.decode(decoded->payload());
+    return message && *message == "ecosystem.protocol";
+}
+
 [[nodiscard]] bool validate_async_data_plane()
 {
     MemoryJournal journal;
@@ -301,8 +329,9 @@ int main(int argc, char **argv)
     }
 
     return validate_process_and_resilience(std::filesystem::absolute(argv[0])) &&
-                   validate_data_plane() && validate_async_data_plane() &&
-                   validate_failure_paths() && validate_service_control_plane()
+                   validate_data_plane() && validate_protocol_plane() &&
+                   validate_async_data_plane() && validate_failure_paths() &&
+                   validate_service_control_plane()
                ? 0
                : 1;
 }
