@@ -43,6 +43,9 @@ MEF предоставляет стандартную production-реализа�
 - `vosp::contracts::ProtocolFramer<F, V, M>` проверяет фрейминг сообщений;
 - `vosp::contracts::ProtocolStreamDecoder<D, V, M>` проверяет инкрементальное
   декодирование потока.
+- `vosp::contracts::ByteStreamTransport<C, M>` проверяет упорядоченный ввод-вывод байтов;
+- `vosp::contracts::TransportConnector<C, E, M>` проверяет connect/reconnect;
+- `vosp::contracts::DatagramTransport<S, E, D, M>` проверяет транспорт датаграмм с endpoint.
 
 MCF не содержит конкретного класса `Error`, `Result`, `LogEntry` или `Sink`. Его
 контракт выполнения — нулевая работа runtime: все проверки являются концепциями,
@@ -95,7 +98,7 @@ note](docs/ARCHITECTURE.md) объясняет замену контрактов
 benchmark одинаковой работы от функционального сравнения с известными проектами.
 
 ```cmake
-find_package(vosp_contracts 0.7 REQUIRED CONFIG)
+find_package(vosp_contracts 0.8 REQUIRED CONFIG)
 target_link_libraries(your_target PRIVATE vosp::contracts)
 ```
 

@@ -24,6 +24,9 @@ MCF содержит протоколы compile-time, а не реализаци
 | `ProtocolCodec<C, V, M>` | Кодек значения в байты |
 | `ProtocolFramer<F, V, M>` | Ограниченный фрейминг сообщений |
 | `ProtocolStreamDecoder<D, V, M>` | Инкрементальное декодирование потока |
+| `ByteStreamTransport<C, M>` | Упорядоченный ввод-вывод байтов |
+| `TransportConnector<C, E, M>` | Явные connect и reconnect |
+| `DatagramTransport<S, E, D, M>` | Ввод-вывод датаграмм с endpoint |
 
 Меньший [`examples/basic.cpp`](../examples/basic.cpp) демонстрирует минимальную
 заменяемую модель ошибки.
