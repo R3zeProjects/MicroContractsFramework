@@ -14,6 +14,7 @@
 - Added structural contracts for ordered byte streams and reconnectable connectors.
 - Added owning datagram and endpoint-aware datagram transport contracts.
 - Kept sockets, polling, DNS, and platform handles outside MCF.
+- Extended the ecosystem package gate to consume the compiled `vosp::transport` target.
 
 ## 0.7.0-beta
 

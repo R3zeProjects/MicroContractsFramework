@@ -5,7 +5,7 @@ project(VospEcosystemPackageConsumer LANGUAGES CXX)
 include(CTest)
 
 find_package(vosp_contracts 0.8 REQUIRED CONFIG)
-find_package(mprotocol 0.1 REQUIRED CONFIG)
+find_package(mprotocol 0.2 REQUIRED CONFIG)
 find_package(vosp 0.6 REQUIRED CONFIG)
 find_package(mpf 0.3 REQUIRED CONFIG)
 find_package(mtf 0.1.1 REQUIRED CONFIG)
@@ -19,6 +19,7 @@ target_compile_features(vosp_ecosystem_package_consumer PRIVATE cxx_std_23)
 target_link_libraries(vosp_ecosystem_package_consumer PRIVATE
     vosp::contracts
     vosp::protocol
+    vosp::transport
     vosp::vosp
     vosp::persistence
     vosp::telemetry
