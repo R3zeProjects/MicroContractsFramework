@@ -4,6 +4,11 @@
 
 - `<vosp/contracts/error.hpp>`: `Error`, `Result`, and `ErrorModel` concepts;
 - `<vosp/contracts/logging.hpp>`: `LogEntry` and `LogSink` concepts;
+- `<vosp/contracts/protocol.hpp>`: message, codec, framing, and stream-decoder concepts;
+- `<vosp/contracts/transport.hpp>`: byte-stream, connector, and datagram concepts;
+- `<vosp/contracts/security.hpp>`: secure-byte, digest, authenticator, and permission concepts;
+- `<vosp/contracts/configuration.hpp>`: snapshot, provider, and observer concepts;
+- `<vosp/contracts/telemetry.hpp>`: record and exporter concepts;
 - `<vosp/contracts.hpp>`: supported umbrella;
 - `vosp::contracts`: exported CMake target.
 
@@ -19,6 +24,14 @@ implementation.
 A log entry exposes an error and level. A sink structurally provides
 `bool write(const Entry&)`. Inheritance and a particular virtual interface are
 not required by MCF.
+
+## Security providers
+
+`SecureBytes` requires mutable and immutable byte spans plus a `noexcept`
+explicit erasure operation. `DigestProvider` and `MessageAuthenticator` define
+result-bearing cryptographic provider shapes but never select or implement an
+algorithm. `PermissionPolicy` describes only an authorization decision; concrete
+permission and resource types remain application-owned.
 
 ## Diagnostics
 

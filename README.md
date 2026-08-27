@@ -46,6 +46,10 @@ wrapper objects, conversions, or adapter layers.
 - `vosp::contracts::ByteStreamTransport<C, M>` checks ordered byte streams;
 - `vosp::contracts::TransportConnector<C, E, M>` checks connect/reconnect behavior;
 - `vosp::contracts::DatagramTransport<S, E, D, M>` checks datagram transports.
+- `vosp::contracts::SecureBytes<B>` checks erasable secret ownership;
+- `vosp::contracts::DigestProvider<P, M>` checks digest providers;
+- `vosp::contracts::MessageAuthenticator<A, M>` checks keyed tag providers;
+- `vosp::contracts::PermissionPolicy<P, A, R>` checks authorization policy.
 
 MCF contains no concrete `Error`, `Result`, `LogEntry`, or `Sink` class.
 Its performance contract is zero runtime work: all checks are concepts evaluated
@@ -98,7 +102,7 @@ The [ecosystem comparison](docs/ECOSYSTEM_COMPARISON.md) separates reproducible
 same-work benchmarks from feature-only comparisons with established projects.
 
 ```cmake
-find_package(vosp_contracts 0.8 REQUIRED CONFIG)
+find_package(vosp_contracts 0.9 REQUIRED CONFIG)
 target_link_libraries(your_target PRIVATE vosp::contracts)
 ```
 

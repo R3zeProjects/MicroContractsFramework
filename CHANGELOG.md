@@ -9,6 +9,12 @@
   rejected persistence/configuration, and non-zero child-process scenarios.
 - Documented the package compatibility matrix and failure-diagnosis policy.
 
+## 0.9.0-beta
+
+- Added structural contracts for secure byte ownership and explicit erasure.
+- Added replaceable digest and keyed message-authenticator provider contracts.
+- Added a generic permission-policy contract without owning an authorization model.
+
 ## 0.8.0-beta
 
 - Added structural contracts for ordered byte streams and reconnectable connectors.
