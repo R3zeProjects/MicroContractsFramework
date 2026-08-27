@@ -4,7 +4,7 @@ project(VospEcosystemPackageConsumer LANGUAGES CXX)
 
 include(CTest)
 
-find_package(vosp_contracts 0.7 REQUIRED CONFIG)
+find_package(vosp_contracts 0.8 REQUIRED CONFIG)
 find_package(mprotocol 0.1 REQUIRED CONFIG)
 find_package(vosp 0.6 REQUIRED CONFIG)
 find_package(mpf 0.3 REQUIRED CONFIG)

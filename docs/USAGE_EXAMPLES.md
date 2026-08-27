@@ -24,6 +24,9 @@ The compilable [`examples/contracts.cpp`](../examples/contracts.cpp) covers:
 | `ProtocolCodec<C, V, M>` | value-to-bytes codec |
 | `ProtocolFramer<F, V, M>` | bounded message framing |
 | `ProtocolStreamDecoder<D, V, M>` | incremental stream decoding |
+| `ByteStreamTransport<C, M>` | ordered byte stream I/O |
+| `TransportConnector<C, E, M>` | explicit connect and reconnect |
+| `DatagramTransport<S, E, D, M>` | endpoint-aware datagram I/O |
 
 The smaller [`examples/basic.cpp`](../examples/basic.cpp) demonstrates the
 minimum replaceable error model.

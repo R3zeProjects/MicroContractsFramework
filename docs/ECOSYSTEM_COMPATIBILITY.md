@@ -9,7 +9,7 @@ one C++23 composition:
 
 | Framework | Version line | CMake package | Imported target |
 | --- | --- | --- | --- |
-| MicroContractsFramework | 0.7.x beta | `vosp_contracts` | `vosp::contracts` |
+| MicroContractsFramework | 0.8.x beta | `vosp_contracts` | `vosp::contracts` |
 | MicroProtocolFramework | 0.1.x beta | `mprotocol` | `vosp::protocol` |
 | MicroErrorFramework | 0.6.x beta | `vosp` | `vosp::vosp` |
 | MicroPersistenceFramework | 0.3.x beta | `mpf` | `vosp::persistence` |

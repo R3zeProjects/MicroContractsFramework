@@ -7,6 +7,7 @@
 #include <vosp/contracts/logging.hpp>
 #include <vosp/contracts/protocol.hpp>
 #include <vosp/contracts/telemetry.hpp>
+#include <vosp/contracts/transport.hpp>
 #include <vosp/contracts/version.hpp>
 
 #ifndef VOSP_NAMESPACE_FACADE_DEFINED

@@ -43,6 +43,9 @@ wrapper objects, conversions, or adapter layers.
 - `vosp::contracts::ProtocolCodec<C, V, M>` checks value codecs;
 - `vosp::contracts::ProtocolFramer<F, V, M>` checks message framing;
 - `vosp::contracts::ProtocolStreamDecoder<D, V, M>` checks incremental decoding.
+- `vosp::contracts::ByteStreamTransport<C, M>` checks ordered byte streams;
+- `vosp::contracts::TransportConnector<C, E, M>` checks connect/reconnect behavior;
+- `vosp::contracts::DatagramTransport<S, E, D, M>` checks datagram transports.
 
 MCF contains no concrete `Error`, `Result`, `LogEntry`, or `Sink` class.
 Its performance contract is zero runtime work: all checks are concepts evaluated
@@ -95,7 +98,7 @@ The [ecosystem comparison](docs/ECOSYSTEM_COMPARISON.md) separates reproducible
 same-work benchmarks from feature-only comparisons with established projects.
 
 ```cmake
-find_package(vosp_contracts 0.7 REQUIRED CONFIG)
+find_package(vosp_contracts 0.8 REQUIRED CONFIG)
 target_link_libraries(your_target PRIVATE vosp::contracts)
 ```
 

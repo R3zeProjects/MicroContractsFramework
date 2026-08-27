@@ -9,6 +9,12 @@
   rejected persistence/configuration, and non-zero child-process scenarios.
 - Documented the package compatibility matrix and failure-diagnosis policy.
 
+## 0.8.0-beta
+
+- Added structural contracts for ordered byte streams and reconnectable connectors.
+- Added owning datagram and endpoint-aware datagram transport contracts.
+- Kept sockets, polling, DNS, and platform handles outside MCF.
+
 ## 0.7.0-beta
 
 - Added structural contracts for versioned protocol messages and value codecs.
