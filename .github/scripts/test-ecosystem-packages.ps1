@@ -8,7 +8,9 @@ param(
     [Parameter(Mandatory = $true)]
     [string]$BuildRoot,
 
-    [string]$CxxCompiler = ''
+    [string]$CxxCompiler = '',
+
+    [string]$CCompiler = ''
 )
 
 $ErrorActionPreference = 'Stop'
@@ -17,10 +19,17 @@ $contracts = (Resolve-Path -LiteralPath $ContractsSource).Path
 $frameworks = (Resolve-Path -LiteralPath $FrameworksRoot).Path
 $build = [System.IO.Path]::GetFullPath($BuildRoot)
 $prefix = Join-Path $build 'install'
-$compilerOption = if ($CxxCompiler) {
-    @("-DCMAKE_CXX_COMPILER=$CxxCompiler")
-} else {
-    @()
+$compilerOptions = @()
+if ($CxxCompiler) {
+    $compilerOptions += "-DCMAKE_CXX_COMPILER=$CxxCompiler"
+
+    if (-not $CCompiler) {
+        $CCompiler = $CxxCompiler -replace 'clang\+\+(\.exe)?$', 'clang$1'
+        $CCompiler = $CCompiler -replace 'g\+\+(\.exe)?$', 'gcc$1'
+    }
+}
+if ($CCompiler) {
+    $compilerOptions += "-DCMAKE_C_COMPILER=$CCompiler"
 }
 
 function Invoke-CMake {
@@ -47,7 +56,7 @@ function Install-Framework {
         '-DBUILD_TESTING=OFF',
         "-DCMAKE_INSTALL_PREFIX=$prefix",
         "-DCMAKE_PREFIX_PATH=$prefix"
-    ) + $compilerOption + $Options
+    ) + $compilerOptions + $Options
 
     Invoke-CMake @configure
     Invoke-CMake --build $frameworkBuild --config Release --parallel
@@ -78,7 +87,7 @@ $consumerConfigure = @(
     '-B', $consumerBuild,
     '-DCMAKE_BUILD_TYPE=Release',
     "-DCMAKE_PREFIX_PATH=$prefix"
-) + $compilerOption
+) + $compilerOptions
 Invoke-CMake @consumerConfigure
 Invoke-CMake --build $consumerBuild --config Release --parallel
 & ctest --test-dir $consumerBuild -C Release --output-on-failure
