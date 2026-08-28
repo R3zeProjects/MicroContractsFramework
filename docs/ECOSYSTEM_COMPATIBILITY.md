@@ -17,7 +17,7 @@ one C++23 composition:
 | MicroConfigurationFramework | 0.1.x beta | `mconfig` | `vosp::configuration` |
 | MicroResilienceFramework | 0.1.x beta | `mrf` | `vosp::resilience` |
 | MicroWorkflowFramework | 0.1.x beta | `mwf` | `vosp::workflow` |
-| MicroServiceFramework | 0.1.x beta | `msf` | `vosp::service` |
+| MicroServiceFramework | 0.2.x beta | `msf` | `vosp::service`, `vosp::plugin` |
 
 Patch releases preserve source compatibility. Before 1.0, a framework may make
 a documented source-incompatible change in a minor release. Applications should
@@ -37,7 +37,7 @@ compile-time boundary without adding a runtime dependency. The gate:
    tree and rejects runtime dependencies in the MCF build graph;
 6. compiles and runs configuration, error, logging, protocol framing, bounded cache,
    persistence, telemetry, resilience, child-process workflow, and in-process service
-   lifecycle operations together;
+   lifecycle and plugin-factory operations together;
 7. covers valid and invalid configuration, persistence rejection, retry recovery,
    direct export, bounded asynchronous drain, shutdown rejection, and non-zero
    child-process completion;

@@ -9,6 +9,8 @@
   rejected persistence/configuration, and non-zero child-process scenarios.
 - Updated the package consumer to require MPF 0.4 and exercise its bounded cache
   through the shared `KeyValueCache` contract.
+- Updated the ecosystem consumer to require MSF 0.2 and execute its installed
+  static plugin factory and lifecycle target.
 - Documented the package compatibility matrix and failure-diagnosis policy.
 
 ## 0.11.0-beta

@@ -2,6 +2,7 @@
 #include <vosp/configuration.hpp>
 #include <vosp/contracts.hpp>
 #include <vosp/persistence.hpp>
+#include <vosp/plugin.hpp>
 #include <vosp/protocol.hpp>
 #include <vosp/resilience.hpp>
 #include <vosp/security.hpp>
@@ -37,7 +38,7 @@ static_assert(vosp::telemetry::version::patch >= 1);
 static_assert(vosp::configuration::version::minor == 1);
 static_assert(vosp::resilience::version::minor == 1);
 static_assert(vosp::workflow::version_minor == 1);
-static_assert(vosp::service::version == "0.1.0-beta");
+static_assert(vosp::service::version == "0.2.0-beta");
 static_assert(vosp::contracts::ErrorModel<vosp::error::Model>);
 static_assert(vosp::contracts::KeyValueCache<vsp::Cache<std::string, std::string>>);
 
@@ -71,6 +72,24 @@ class RejectingJournal
     {
         return std::unexpected{
             vosp::persistence::Error{0xE001, "deliberate ecosystem rejection"}};
+    }
+};
+
+class EcosystemPlugin
+{
+  public:
+    [[nodiscard]] std::string_view name() const noexcept { return "ecosystem.plugin"; }
+    [[nodiscard]] std::string_view version() const noexcept { return "1.0.0"; }
+    [[nodiscard]] vosp::error::OperationResult start() { return {}; }
+    [[nodiscard]] vosp::error::OperationResult stop() { return {}; }
+};
+
+struct EcosystemPluginFactory
+{
+    using plugin_type = EcosystemPlugin;
+    [[nodiscard]] vosp::error::Result<std::unique_ptr<EcosystemPlugin>> create()
+    {
+        return std::make_unique<EcosystemPlugin>();
     }
 };
 
@@ -348,6 +367,24 @@ template <typename Pipeline> class ConfigurationObserver
                                                "stop:database"};
 }
 
+[[nodiscard]] bool validate_plugin_plane()
+{
+    vsp::Plugins<vsp::error::Model> plugins;
+    EcosystemPluginFactory factory;
+    if (!plugins.create(factory) || !plugins.start_all())
+    {
+        return false;
+    }
+    const auto running = plugins.snapshot();
+    if (running.size() != 1 || running.front().name != "ecosystem.plugin" ||
+        running.front().version != "1.0.0" ||
+        running.front().state != vosp::service::State::running)
+    {
+        return false;
+    }
+    return plugins.stop_all() && !plugins.active();
+}
+
 [[nodiscard]] bool validate_transport_plane()
 {
     vosp::transport::TcpStream stream;
@@ -375,7 +412,8 @@ int main(int argc, char **argv)
                    validate_data_plane() && validate_protocol_plane() &&
                    validate_cache_plane() && validate_async_data_plane() &&
                    validate_failure_paths() &&
-                   validate_service_control_plane() && validate_transport_plane()
+                   validate_service_control_plane() && validate_plugin_plane() &&
+                   validate_transport_plane()
                ? 0
                : 1;
 }
