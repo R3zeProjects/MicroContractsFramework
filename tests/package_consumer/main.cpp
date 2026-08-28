@@ -1,4 +1,5 @@
 #include <vosp/contracts.hpp>
+#include <vosp/testing.hpp>
 
 #include <cstdint>
 #include <expected>
@@ -31,7 +32,7 @@ struct Model
 };
 
 static_assert(vosp::contracts::ErrorModel<Model>);
-static_assert(vosp::contracts::version::api == "0.11.0-beta");
+static_assert(vosp::contracts::version::api == "0.12.0-beta");
 
 struct TelemetryRecord
 {
@@ -52,5 +53,7 @@ static_assert(vosp::contracts::TelemetryExporter<Exporter, TelemetryRecord>);
 
 int main()
 {
-    return Model::make_error(7, "consumer").code() == 7 ? 0 : 1;
+    const auto report = vosp::testing::run_stress(
+        32, [](const std::size_t index) { return index < 32; });
+    return Model::make_error(7, "consumer").code() == 7 && report.passed() ? 0 : 1;
 }

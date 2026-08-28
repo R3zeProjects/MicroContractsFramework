@@ -19,7 +19,7 @@ struct Model
     using Error = ::Error;
     template <typename Type> using Result = std::expected<Type, Error>;
     using OperationResult = Result<void>;
-    [[nodiscard]] static Error make_error(std::uint32_t, std::string) { return {}; }
+    [[nodiscard]] static Error make_error(std::uint32_t, const std::string &) { return {}; }
 };
 
 struct Plugin

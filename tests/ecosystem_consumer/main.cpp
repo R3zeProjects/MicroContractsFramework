@@ -1,6 +1,7 @@
 #include <vosp.hpp>
 #include <vosp/configuration.hpp>
 #include <vosp/contracts.hpp>
+#include <vosp/testing.hpp>
 #include <vosp/persistence.hpp>
 #include <vosp/plugin.hpp>
 #include <vosp/protocol.hpp>
@@ -395,6 +396,15 @@ template <typename Pipeline> class ConfigurationObserver
            invalid_connect.error().kind() == vosp::transport::ErrorCode::invalid_argument &&
            invalid_receive.error().kind() == vosp::transport::ErrorCode::not_connected;
 }
+
+[[nodiscard]] bool validate_testing_plane()
+{
+    const auto report = vosp::testing::check_property(
+        {.cases = 256, .seed = 0xC0FFEE},
+        [](vosp::testing::Random &random, std::size_t) { return random.uniform(0, 255); },
+        [](const std::uint64_t value) { return value < 256; });
+    return report.passed();
+}
 } // namespace
 
 int main(int argc, char **argv)
@@ -413,7 +423,7 @@ int main(int argc, char **argv)
                    validate_cache_plane() && validate_async_data_plane() &&
                    validate_failure_paths() &&
                    validate_service_control_plane() && validate_plugin_plane() &&
-                   validate_transport_plane()
+                   validate_transport_plane() && validate_testing_plane()
                ? 0
                : 1;
 }

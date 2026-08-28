@@ -8,4 +8,4 @@ Checks: >
   modernize-use-override,
   modernize-use-nodiscard
 WarningsAsErrors: ''
-HeaderFilterRegex: '.*[/\\]vosp[/\\]contracts.*'
+HeaderFilterRegex: '.*[/\\]vosp[/\\](contracts|testing).*'
