@@ -4,9 +4,11 @@
 #include <cstdint>
 #include <expected>
 #include <memory>
+#include <optional>
 #include <span>
 #include <string>
 #include <string_view>
+#include <unordered_map>
 
 namespace {
 class TestError {
@@ -98,6 +100,32 @@ struct TestConfigurationObserver {
   std::uint64_t last_revision = 0;
 };
 
+struct TestCache {
+  using key_type = int;
+  using mapped_type = std::string;
+
+  [[nodiscard]] std::optional<mapped_type> get(const key_type &key) {
+    const auto found = values.find(key);
+    return found == values.end() ? std::nullopt
+                                 : std::optional<mapped_type>{found->second};
+  }
+  void put(const key_type &key, mapped_type value) {
+    values.insert_or_assign(key, std::move(value));
+  }
+  [[nodiscard]] bool contains(const key_type &key) {
+    return values.contains(key);
+  }
+  [[nodiscard]] bool erase(const key_type &key) {
+    return values.erase(key) != 0;
+  }
+  [[nodiscard]] std::size_t size() { return values.size(); }
+  [[nodiscard]] std::size_t capacity() const { return 8; }
+  [[nodiscard]] std::size_t purge_expired() { return 0; }
+  void clear() { values.clear(); }
+
+  std::unordered_map<key_type, mapped_type> values;
+};
+
 static_assert(vosp::contracts::Error<TestError>);
 static_assert(!vosp::contracts::Error<InvalidError>);
 static_assert(vosp::contracts::ErrorModel<TestErrorModel>);
@@ -115,6 +143,7 @@ static_assert(
     vosp::contracts::ConfigurationProvider<TestConfigurationProvider>);
 static_assert(vosp::contracts::ConfigurationObserver<
               TestConfigurationObserver, TestConfigurationSnapshot>);
+static_assert(vosp::contracts::KeyValueCache<TestCache>);
 } // namespace
 
 int main() {

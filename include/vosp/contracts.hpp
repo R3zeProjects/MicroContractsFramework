@@ -2,6 +2,7 @@
 
 /** @file contracts.hpp Public umbrella for MicroContractsFramework. */
 
+#include <vosp/contracts/cache.hpp>
 #include <vosp/contracts/configuration.hpp>
 #include <vosp/contracts/error.hpp>
 #include <vosp/contracts/logging.hpp>

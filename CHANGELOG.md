@@ -9,6 +9,13 @@
   rejected persistence/configuration, and non-zero child-process scenarios.
 - Documented the package compatibility matrix and failure-diagnosis policy.
 
+## 0.10.0-beta
+
+- Added the implementation-free `KeyValueCache` structural contract.
+- Defined owning lookup, replacement, capacity, erasure, and explicit
+  expiration-cleanup signatures without imposing an eviction implementation.
+- Updated the ecosystem gate for MicroProtocolFramework 0.3 security support.
+
 ## 0.9.0-beta
 
 - Added structural contracts for secure byte ownership and explicit erasure.

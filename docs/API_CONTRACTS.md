@@ -3,6 +3,7 @@
 ## Public surface
 
 - `<vosp/contracts/error.hpp>`: `Error`, `Result`, and `ErrorModel` concepts;
+- `<vosp/contracts/cache.hpp>`: owning key-value cache and expiration cleanup;
 - `<vosp/contracts/logging.hpp>`: `LogEntry` and `LogSink` concepts;
 - `<vosp/contracts/protocol.hpp>`: message, codec, framing, and stream-decoder concepts;
 - `<vosp/contracts/transport.hpp>`: byte-stream, connector, and datagram concepts;
