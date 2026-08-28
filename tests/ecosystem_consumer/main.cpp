@@ -32,13 +32,14 @@ static_assert(vosp::security::version::api == "0.3.0-beta");
 static_assert(vosp::contracts::ByteStreamTransport<vosp::transport::TcpStream,
                                                    vosp::transport::Model>);
 static_assert(vosp::version::minor == 6);
-static_assert(vosp::persistence::version::minor == 3);
+static_assert(vosp::persistence::version::minor == 4);
 static_assert(vosp::telemetry::version::patch >= 1);
 static_assert(vosp::configuration::version::minor == 1);
 static_assert(vosp::resilience::version::minor == 1);
 static_assert(vosp::workflow::version_minor == 1);
 static_assert(vosp::service::version == "0.1.0-beta");
 static_assert(vosp::contracts::ErrorModel<vosp::error::Model>);
+static_assert(vosp::contracts::KeyValueCache<vsp::Cache<std::string, std::string>>);
 
 class MemoryJournal
 {
@@ -221,6 +222,31 @@ template <typename Pipeline> class ConfigurationObserver
     return message && *message == "ecosystem.protocol";
 }
 
+[[nodiscard]] bool validate_cache_plane()
+{
+    vsp::Cache<std::string, int> cache{2};
+    cache.put("alpha", 1);
+    auto snapshot = cache.get("alpha");
+    if (!snapshot)
+    {
+        return false;
+    }
+    *snapshot = 99;
+    const auto retained = cache.get("alpha");
+    if (!retained || *retained != 1)
+    {
+        return false;
+    }
+
+    cache.put("beta", 2);
+    cache.put("gamma", 3);
+    const auto beta = cache.get("beta");
+    const auto gamma = cache.get("gamma");
+    const auto stats = cache.stats();
+    return !cache.contains("alpha") && beta && *beta == 2 && gamma && *gamma == 3 &&
+           cache.size() == 2 && stats.insertions == 3 && stats.evictions == 1;
+}
+
 [[nodiscard]] bool validate_async_data_plane()
 {
     MemoryJournal journal;
@@ -347,7 +373,8 @@ int main(int argc, char **argv)
 
     return validate_process_and_resilience(std::filesystem::absolute(argv[0])) &&
                    validate_data_plane() && validate_protocol_plane() &&
-                   validate_async_data_plane() && validate_failure_paths() &&
+                   validate_cache_plane() && validate_async_data_plane() &&
+                   validate_failure_paths() &&
                    validate_service_control_plane() && validate_transport_plane()
                ? 0
                : 1;

@@ -7,6 +7,8 @@
 - Added a dependency-direction check for all public and implementation source trees.
 - Expanded the consumer with version contracts, asynchronous drain, retry,
   rejected persistence/configuration, and non-zero child-process scenarios.
+- Updated the package consumer to require MPF 0.4 and exercise its bounded cache
+  through the shared `KeyValueCache` contract.
 - Documented the package compatibility matrix and failure-diagnosis policy.
 
 ## 0.10.0-beta

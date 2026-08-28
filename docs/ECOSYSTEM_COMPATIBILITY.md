@@ -12,7 +12,7 @@ one C++23 composition:
 | MicroContractsFramework | 0.10.x beta | `vosp_contracts` | `vosp::contracts` |
 | MicroProtocolFramework | 0.3.x beta | `mprotocol` | `vosp::protocol`, `vosp::transport`, `vosp::security` |
 | MicroErrorFramework | 0.6.x beta | `vosp` | `vosp::vosp` |
-| MicroPersistenceFramework | 0.3.x beta | `mpf` | `vosp::persistence` |
+| MicroPersistenceFramework | 0.4.x beta | `mpf` | `vosp::persistence` |
 | MicroTelemetryFramework | 0.1.1+ beta | `mtf` | `vosp::telemetry` |
 | MicroConfigurationFramework | 0.1.x beta | `mconfig` | `vosp::configuration` |
 | MicroResilienceFramework | 0.1.x beta | `mrf` | `vosp::resilience` |
@@ -35,9 +35,9 @@ compile-time boundary without adding a runtime dependency. The gate:
 4. configures a separate consumer exclusively through `find_package`;
 5. rejects direct runtime-to-runtime includes in every core `include/` and `src/`
    tree and rejects runtime dependencies in the MCF build graph;
-6. compiles and runs configuration, error, logging, protocol framing, persistence,
-   telemetry, resilience, child-process workflow, and in-process service lifecycle
-   operations together;
+6. compiles and runs configuration, error, logging, protocol framing, bounded cache,
+   persistence, telemetry, resilience, child-process workflow, and in-process service
+   lifecycle operations together;
 7. covers valid and invalid configuration, persistence rejection, retry recovery,
    direct export, bounded asynchronous drain, shutdown rejection, and non-zero
    child-process completion;
