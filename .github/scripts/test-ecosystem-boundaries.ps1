@@ -14,7 +14,8 @@ $frameworks = (Resolve-Path -LiteralPath $FrameworksRoot).Path
 $modules = @(
     @{ Name = 'MCF'; Path = $contracts; Allowed = @('vosp/contracts') },
     @{ Name = 'MProtocolF'; Path = (Join-Path $frameworks 'MicroProtocolFramework');
-       Allowed = @('vosp/protocol', 'vosp/contracts') },
+       Allowed = @('vosp/protocol', 'vosp/transport', 'vosp/security',
+                   'vosp/contracts') },
     @{ Name = 'MEF'; Path = (Join-Path $frameworks 'MicroErrorFramework');
        Allowed = @('vosp.hpp', 'vosp/error', 'vosp/logger', 'vosp/version',
                    'vosp/worker_pool', 'vosp/contracts') },
@@ -73,7 +74,7 @@ $mcfBuildFiles = @((Join-Path $contracts 'CMakeLists.txt')) +
     @(Get-ChildItem -LiteralPath (Join-Path $contracts 'cmake') -Recurse -File -ErrorAction SilentlyContinue |
       ForEach-Object { $_.FullName })
 $runtimeDependencyPattern =
-    'Micro(?:Error|Protocol|Persistence|Telemetry|Configuration|Resilience|Workflow|Service)Framework|vosp::(?:vosp|protocol|persistence|telemetry|configuration|resilience|workflow|service)'
+    'Micro(?:Error|Protocol|Security|Persistence|Telemetry|Configuration|Resilience|Workflow|Service)Framework|vosp::(?:vosp|protocol|transport|security|persistence|telemetry|configuration|resilience|workflow|service)'
 foreach ($match in Select-String -Path $mcfBuildFiles -Pattern $runtimeDependencyPattern) {
     $relative = [System.IO.Path]::GetRelativePath($contracts, $match.Path)
     $violations.Add("MCF build graph: ${relative}:$($match.LineNumber) references runtime code")
