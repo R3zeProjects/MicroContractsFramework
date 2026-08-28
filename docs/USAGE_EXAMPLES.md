@@ -36,6 +36,8 @@ The compilable [`examples/contracts.cpp`](../examples/contracts.cpp) covers:
 
 The smaller [`examples/basic.cpp`](../examples/basic.cpp) demonstrates the
 minimum replaceable error model.
+[`examples/testing.cpp`](../examples/testing.cpp) demonstrates deterministic property
+checks and bounded concurrent stress through the separate `vosp::testing` target.
 
 ## Generic algorithm
 
@@ -51,10 +53,13 @@ auto guarded(Operation&& operation)
 
 Concept failure is intentionally a compile-time error. Do not catch it or add a
 runtime adapter: change the implementation type so it satisfies the protocol.
-Negative examples are maintained in `tests/contracts_tests.cpp`.
+Negative concept examples are maintained in `tests/contracts_tests.cpp`; actual expected
+compiler failures are maintained under `tests/compile_fail`.
 
 ## Stable boundary
 
-Only headers under `include/vosp/contracts` are public. MCF owns no allocation,
-thread, storage, logger or exporter lifetime. Those responsibilities remain in
-the implementation framework or application composition root.
+Headers under `include/vosp/contracts` and `include/vosp/testing` are public. The core
+contract target owns no allocation, thread, storage, logger or exporter lifetime. Those
+responsibilities remain in the implementation framework or application composition root.
+Test threads exist only during an explicit `run_concurrently` call and are joined before
+it returns.

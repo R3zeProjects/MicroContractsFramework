@@ -9,7 +9,7 @@ one C++23 composition:
 
 | Framework | Version line | CMake package | Imported target |
 | --- | --- | --- | --- |
-| MicroContractsFramework | 0.11.x beta | `vosp_contracts` | `vosp::contracts` |
+| MicroContractsFramework | 0.12.x beta | `vosp_contracts` | `vosp::contracts`, `vosp::testing` |
 | MicroProtocolFramework | 0.3.x beta | `mprotocol` | `vosp::protocol`, `vosp::transport`, `vosp::security` |
 | MicroErrorFramework | 0.6.x beta | `vosp` | `vosp::vosp` |
 | MicroPersistenceFramework | 0.4.x beta | `mpf` | `vosp::persistence` |
@@ -37,7 +37,7 @@ compile-time boundary without adding a runtime dependency. The gate:
    tree and rejects runtime dependencies in the MCF build graph;
 6. compiles and runs configuration, error, logging, protocol framing, bounded cache,
    persistence, telemetry, resilience, child-process workflow, and in-process service
-   lifecycle and plugin-factory operations together;
+   lifecycle, plugin-factory operations, and deterministic test runners together;
 7. covers valid and invalid configuration, persistence rejection, retry recovery,
    direct export, bounded asynchronous drain, shutdown rejection, and non-zero
    child-process completion;

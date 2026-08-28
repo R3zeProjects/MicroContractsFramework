@@ -13,6 +13,16 @@
   static plugin factory and lifecycle target.
 - Documented the package compatibility matrix and failure-diagnosis policy.
 
+## 0.12.0-beta
+
+- Added the separate `vosp::testing` header-only target with deterministic property,
+  sequential stress, and bounded concurrency runners.
+- Added reproducible SplitMix64 sampling, structured failure reports, exception capture,
+  shared cancellation, and a hard 1024-worker limit.
+- Added the installed `vosp_add_compile_fail_test` CMake function and compile-fail
+  coverage for source-tree and package consumers.
+- Kept `vosp::contracts` free of test runtime behavior and production-side overhead.
+
 ## 0.11.0-beta
 
 - Added implementation-free `PluginLifecycle` and `PluginFactory` contracts.

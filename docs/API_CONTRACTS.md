@@ -14,6 +14,12 @@
 - `<vosp/contracts.hpp>`: supported umbrella;
 - `vosp::contracts`: exported CMake target.
 
+The testing companion surface is intentionally separate:
+
+- `<vosp/testing.hpp>`: property, stress, concurrency, random, and report umbrella;
+- `vosp::testing`: exported header-only CMake target;
+- `VospTesting.cmake`: installed compile-fail CTest registration.
+
 ## Error model
 
 An error is copyable and movable and exposes `code()` and `message()`. An error
@@ -47,6 +53,8 @@ dynamic-library loader, ABI structure, allocation mechanism, or unload policy.
 
 Concept failures are compile-time API diagnostics. MCF performs no runtime
 validation, allocation, exception translation, logging, or conversion.
+The optional testing surface catches test-operation exceptions into `TestReport`; it does
+not change these contract semantics.
 
 ## Stability
 

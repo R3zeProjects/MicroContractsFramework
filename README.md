@@ -3,7 +3,9 @@
 MicroContractsFramework (MCF) is a header-only C++23 contract library for
 building replaceable VOSP ecosystem components. It specifies compile-time API
 requirements; it does not implement errors, results, loggers, sinks,
-persistence, configuration storage, scheduling, or I/O.
+persistence, configuration storage, scheduling, or I/O. A separate optional
+`vosp::testing` target provides reusable verification tools without changing the
+production contract target.
 
 MEF provides the standard production implementation of `Error`, `Result<T>`,
 and logging types. MPF and future frameworks may accept that implementation or
@@ -60,6 +62,24 @@ Its performance contract is zero runtime work: all checks are concepts evaluated
 at compile time. Negative tests now also reject sinks and telemetry exporters
 whose return types do not satisfy the shared contracts.
 
+## Testing utilities
+
+`#include <vosp/testing.hpp>` provides a compact API for ecosystem and application tests:
+
+- `check_property(options, generator, property)` replays generated failures by seed;
+- `run_stress(iterations, operation)` stops at the first false result or exception;
+- `run_concurrently(options, operation)` shares cancellation, joins every worker, and
+  rejects worker counts outside `[1, 1024]`;
+- `vosp_add_compile_fail_test(...)` makes an expected compiler rejection a CTest case.
+
+All runners return `TestReport`; no assertion framework, global registry, background
+worker, or production initialization is added. See the [testing guide](docs/TESTING.md).
+
+On a Ryzen 7 PRO 1700X with Clang 22 Release, the five-run medians were 3.600 ns per
+`run_stress` operation, 3.789 ns per generated property, and 13.856 ns per operation for
+the one-worker concurrent runner. See [benchmark methodology and all
+samples](docs/BENCHMARKS.md); benchmarks are never installed with the package.
+
 ## Custom implementation
 
 ```cpp
@@ -106,8 +126,9 @@ The [ecosystem comparison](docs/ECOSYSTEM_COMPARISON.md) separates reproducible
 same-work benchmarks from feature-only comparisons with established projects.
 
 ```cmake
-find_package(vosp_contracts 0.11 REQUIRED CONFIG)
+find_package(vosp_contracts 0.12 REQUIRED CONFIG)
 target_link_libraries(your_target PRIVATE vosp::contracts)
+target_link_libraries(your_tests PRIVATE vosp::testing)
 ```
 
 Build and test:
@@ -119,7 +140,8 @@ ctest --test-dir build --output-on-failure
 ```
 
 Supported CI toolchains are GCC, Clang, and MSVC. MCF requires C++23 and has no
-runtime or third-party dependency.
+third-party dependency. The contract target performs no runtime work; the testing
+target uses standard-library threads only when explicitly invoked.
 
 ## Dependency rule
 
