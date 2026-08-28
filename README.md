@@ -48,6 +48,8 @@ wrapper objects, conversions, or adapter layers.
 - `vosp::contracts::DatagramTransport<S, E, D, M>` checks datagram transports.
 - `vosp::contracts::KeyValueCache<C>` checks owning cache operations, capacity,
   erasure, and expiration cleanup without prescribing LRU/LFU storage.
+- `vosp::contracts::PluginLifecycle<P, M>` checks named start/stop instances;
+- `vosp::contracts::PluginFactory<F, P, M>` checks owning plugin creation.
 - `vosp::contracts::SecureBytes<B>` checks erasable secret ownership;
 - `vosp::contracts::DigestProvider<P, M>` checks digest providers;
 - `vosp::contracts::MessageAuthenticator<A, M>` checks keyed tag providers;
@@ -104,7 +106,7 @@ The [ecosystem comparison](docs/ECOSYSTEM_COMPARISON.md) separates reproducible
 same-work benchmarks from feature-only comparisons with established projects.
 
 ```cmake
-find_package(vosp_contracts 0.10 REQUIRED CONFIG)
+find_package(vosp_contracts 0.11 REQUIRED CONFIG)
 target_link_libraries(your_target PRIVATE vosp::contracts)
 ```
 

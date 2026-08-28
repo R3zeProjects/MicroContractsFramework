@@ -5,6 +5,7 @@
 - `<vosp/contracts/error.hpp>`: `Error`, `Result`, and `ErrorModel` concepts;
 - `<vosp/contracts/cache.hpp>`: owning key-value cache and expiration cleanup;
 - `<vosp/contracts/logging.hpp>`: `LogEntry` and `LogSink` concepts;
+- `<vosp/contracts/plugin.hpp>`: named plugin lifecycle and owning factory concepts;
 - `<vosp/contracts/protocol.hpp>`: message, codec, framing, and stream-decoder concepts;
 - `<vosp/contracts/transport.hpp>`: byte-stream, connector, and datagram concepts;
 - `<vosp/contracts/security.hpp>`: secure-byte, digest, authenticator, and permission concepts;
@@ -33,6 +34,14 @@ explicit erasure operation. `DigestProvider` and `MessageAuthenticator` define
 result-bearing cryptographic provider shapes but never select or implement an
 algorithm. `PermissionPolicy` describes only an authorization decision; concrete
 permission and resource types remain application-owned.
+
+## Plugins
+
+`PluginLifecycle<Type, Model>` requires stable name and version views plus explicit
+`start()` and `stop()` operations using the selected error model.
+`PluginFactory<Factory, Plugin, Model>` requires an owning
+`Result<std::unique_ptr<Plugin>>`. MCF does not define a base class, registry,
+dynamic-library loader, ABI structure, allocation mechanism, or unload policy.
 
 ## Diagnostics
 

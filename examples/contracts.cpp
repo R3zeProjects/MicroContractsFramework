@@ -73,6 +73,19 @@ struct Observer {
   std::uint64_t revision{};
 };
 
+struct Plugin {
+  [[nodiscard]] std::string_view name() const noexcept { return "example.plugin"; }
+  [[nodiscard]] std::string_view version() const noexcept { return "1.0.0"; }
+  [[nodiscard]] ErrorModel::OperationResult start() { return {}; }
+  [[nodiscard]] ErrorModel::OperationResult stop() { return {}; }
+};
+
+struct PluginFactory {
+  [[nodiscard]] ErrorModel::Result<std::unique_ptr<Plugin>> create() {
+    return std::make_unique<Plugin>();
+  }
+};
+
 static_assert(vosp::contracts::Error<Error>);
 static_assert(vosp::contracts::ErrorModel<ErrorModel>);
 static_assert(vosp::contracts::LogEntry<LogEntry>);
@@ -82,6 +95,8 @@ static_assert(vosp::contracts::TelemetryExporter<Exporter, TelemetryRecord>);
 static_assert(vosp::contracts::ConfigurationSnapshot<Snapshot>);
 static_assert(vosp::contracts::ConfigurationProvider<Provider>);
 static_assert(vosp::contracts::ConfigurationObserver<Observer, Snapshot>);
+static_assert(vosp::contracts::PluginLifecycle<Plugin, ErrorModel>);
+static_assert(vosp::contracts::PluginFactory<PluginFactory, Plugin, ErrorModel>);
 
 int main() {
   Provider provider;

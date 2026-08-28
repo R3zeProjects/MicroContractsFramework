@@ -11,6 +11,13 @@
   through the shared `KeyValueCache` contract.
 - Documented the package compatibility matrix and failure-diagnosis policy.
 
+## 0.11.0-beta
+
+- Added implementation-free `PluginLifecycle` and `PluginFactory` contracts.
+- Defined named lifecycle operations and owning factory results without providing
+  a registry, loader, ABI, or concrete plugin base class.
+- Added standalone header, package-consumer, positive, and negative contract coverage.
+
 ## 0.10.0-beta
 
 - Added the implementation-free `KeyValueCache` structural contract.
