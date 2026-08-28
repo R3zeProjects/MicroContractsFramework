@@ -126,6 +126,21 @@ struct TestCache {
   std::unordered_map<key_type, mapped_type> values;
 };
 
+struct TestPlugin {
+  [[nodiscard]] std::string_view name() const noexcept { return "test.plugin"; }
+  [[nodiscard]] std::string_view version() const noexcept { return "1.0.0"; }
+  [[nodiscard]] TestErrorModel::OperationResult start() { return {}; }
+  [[nodiscard]] TestErrorModel::OperationResult stop() { return {}; }
+};
+
+struct TestPluginFactory {
+  using plugin_type = TestPlugin;
+
+  [[nodiscard]] TestErrorModel::Result<std::unique_ptr<TestPlugin>> create() {
+    return std::make_unique<TestPlugin>();
+  }
+};
+
 static_assert(vosp::contracts::Error<TestError>);
 static_assert(!vosp::contracts::Error<InvalidError>);
 static_assert(vosp::contracts::ErrorModel<TestErrorModel>);
@@ -144,6 +159,8 @@ static_assert(
 static_assert(vosp::contracts::ConfigurationObserver<
               TestConfigurationObserver, TestConfigurationSnapshot>);
 static_assert(vosp::contracts::KeyValueCache<TestCache>);
+static_assert(vosp::contracts::PluginLifecycle<TestPlugin, TestErrorModel>);
+static_assert(vosp::contracts::PluginFactory<TestPluginFactory, TestErrorModel>);
 } // namespace
 
 int main() {

@@ -30,7 +30,7 @@ $modules = @(
     @{ Name = 'MWF'; Path = (Join-Path $frameworks 'MicroWorkflowFramework');
        Allowed = @('vosp/workflow', 'vosp/contracts') },
     @{ Name = 'MSF'; Path = (Join-Path $frameworks 'MicroServiceFramework');
-       Allowed = @('vosp/service', 'vosp/contracts') }
+       Allowed = @('vosp/service', 'vosp/plugin', 'vosp/contracts') }
 )
 
 $violations = [System.Collections.Generic.List[string]]::new()
@@ -44,7 +44,7 @@ foreach ($module in $modules) {
         }
 
         $files = Get-ChildItem -LiteralPath $directory -Recurse -File |
-            Where-Object { $_.Extension -in @('.h', '.hpp', '.cpp', '.cc', '.cxx') }
+            Where-Object { $_.Extension -in @('.h', '.hpp', '.c', '.cpp', '.cc', '.cxx') }
         foreach ($file in $files) {
             $lineNumber = 0
             foreach ($line in Get-Content -LiteralPath $file.FullName) {
@@ -74,7 +74,7 @@ $mcfBuildFiles = @((Join-Path $contracts 'CMakeLists.txt')) +
     @(Get-ChildItem -LiteralPath (Join-Path $contracts 'cmake') -Recurse -File -ErrorAction SilentlyContinue |
       ForEach-Object { $_.FullName })
 $runtimeDependencyPattern =
-    'Micro(?:Error|Protocol|Security|Persistence|Telemetry|Configuration|Resilience|Workflow|Service)Framework|vosp::(?:vosp|protocol|transport|security|persistence|telemetry|configuration|resilience|workflow|service)'
+    'Micro(?:Error|Protocol|Security|Persistence|Telemetry|Configuration|Resilience|Workflow|Service|Plugin)Framework|vosp::(?:vosp|protocol|transport|security|persistence|telemetry|configuration|resilience|workflow|service|plugin)'
 foreach ($match in Select-String -Path $mcfBuildFiles -Pattern $runtimeDependencyPattern) {
     $relative = [System.IO.Path]::GetRelativePath($contracts, $match.Path)
     $violations.Add("MCF build graph: ${relative}:$($match.LineNumber) references runtime code")

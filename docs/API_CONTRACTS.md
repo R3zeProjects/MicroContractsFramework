@@ -5,6 +5,8 @@
 - `<vosp/contracts/error.hpp>`: концепты `Error`, `Result` и `ErrorModel`;
 - `<vosp/contracts/cache.hpp>`: владеющий key-value cache и очистка expiration;
 - `<vosp/contracts/logging.hpp>`: концепты `LogEntry` и `LogSink`;
+- `<vosp/contracts/plugin.hpp>`: концепты именованного жизненного цикла плагина и
+  владеющей фабрики;
 - `<vosp/contracts/protocol.hpp>`: сообщения, кодеки, framing и stream decoder;
 - `<vosp/contracts/transport.hpp>`: byte-stream, connector и datagram;
 - `<vosp/contracts/security.hpp>`: secure-byte, digest, authenticator и permission;
@@ -33,6 +35,15 @@ MCF.
 форму provider с result, но не выбирают и не реализуют алгоритм.
 `PermissionPolicy` описывает только решение авторизации; типы permission и
 resource принадлежат приложению.
+
+## Плагины
+
+`PluginLifecycle<Type, Model>` требует стабильные представления имени и версии, а
+также явные операции `start()` и `stop()` с выбранной моделью ошибок.
+`PluginFactory<Factory, Model>` получает тип плагина из `Factory::plugin_type` и
+требует владеющий `Result<std::unique_ptr<Plugin>>`. MCF не определяет базовый класс,
+реестр, загрузчик динамических библиотек, структуру ABI, механизм выделения памяти
+или политику выгрузки.
 
 ## Диагностика
 

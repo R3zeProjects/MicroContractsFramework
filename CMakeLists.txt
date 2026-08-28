@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.25)
 
-project(MicroContractsFramework VERSION 0.10.0 LANGUAGES CXX)
+project(MicroContractsFramework VERSION 0.11.0 LANGUAGES CXX)
 
 set(MICRO_CONTRACTS_FRAMEWORK_PRERELEASE "beta")
 
@@ -30,6 +30,7 @@ if(BUILD_TESTING)
         tests/header_contracts/cache_header.cpp
         tests/header_contracts/error_header.cpp
         tests/header_contracts/logging_header.cpp
+        tests/header_contracts/plugin_header.cpp
         tests/header_contracts/protocol_header.cpp
         tests/header_contracts/security_header.cpp
         tests/header_contracts/telemetry_header.cpp

@@ -27,6 +27,8 @@ MCF содержит протоколы compile-time, а не реализаци
 | `ByteStreamTransport<C, M>` | Упорядоченный ввод-вывод байтов |
 | `TransportConnector<C, E, M>` | Явные connect и reconnect |
 | `DatagramTransport<S, E, D, M>` | Ввод-вывод датаграмм с endpoint |
+| `PluginLifecycle<P, M>` | Именованный экземпляр плагина с запуском и остановкой |
+| `PluginFactory<F, M>` | Владеющее создание плагина |
 | `SecureBytes<B>` | Владеющие байты с явным стиранием |
 | `DigestProvider<P, M>` | Заменяемое вычисление digest |
 | `MessageAuthenticator<A, M>` | Создание и проверка keyed-tag |

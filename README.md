@@ -48,6 +48,9 @@ MEF предоставляет стандартную production-реализа�
 - `vosp::contracts::DatagramTransport<S, E, D, M>` проверяет транспорт датаграмм с endpoint;
 - `vosp::contracts::KeyValueCache<C>` проверяет владеющие операции cache,
   capacity, удаление и очистку expiration без навязывания LRU/LFU;
+- `vosp::contracts::PluginLifecycle<P, M>` проверяет именованный жизненный цикл
+  плагина с операциями запуска и остановки;
+- `vosp::contracts::PluginFactory<F, M>` проверяет владеющее создание плагина;
 - `vosp::contracts::SecureBytes<B>` проверяет владение стираемыми секретами;
 - `vosp::contracts::DigestProvider<P, M>` проверяет digest-provider;
 - `vosp::contracts::MessageAuthenticator<A, M>` проверяет provider keyed-tag;
@@ -104,7 +107,7 @@ note](docs/ARCHITECTURE.md) объясняет замену контрактов
 benchmark одинаковой работы от функционального сравнения с известными проектами.
 
 ```cmake
-find_package(vosp_contracts 0.10 REQUIRED CONFIG)
+find_package(vosp_contracts 0.11 REQUIRED CONFIG)
 target_link_libraries(your_target PRIVATE vosp::contracts)
 ```
 
