@@ -45,7 +45,13 @@ MEF предоставляет стандартную production-реализа�
   декодирование потока.
 - `vosp::contracts::ByteStreamTransport<C, M>` проверяет упорядоченный ввод-вывод байтов;
 - `vosp::contracts::TransportConnector<C, E, M>` проверяет connect/reconnect;
-- `vosp::contracts::DatagramTransport<S, E, D, M>` проверяет транспорт датаграмм с endpoint.
+- `vosp::contracts::DatagramTransport<S, E, D, M>` проверяет транспорт датаграмм с endpoint;
+- `vosp::contracts::KeyValueCache<C>` проверяет владеющие операции cache,
+  capacity, удаление и очистку expiration без навязывания LRU/LFU;
+- `vosp::contracts::SecureBytes<B>` проверяет владение стираемыми секретами;
+- `vosp::contracts::DigestProvider<P, M>` проверяет digest-provider;
+- `vosp::contracts::MessageAuthenticator<A, M>` проверяет provider keyed-tag;
+- `vosp::contracts::PermissionPolicy<P, A, R>` проверяет политику авторизации.
 
 MCF не содержит конкретного класса `Error`, `Result`, `LogEntry` или `Sink`. Его
 контракт выполнения — нулевая работа runtime: все проверки являются концепциями,
@@ -98,7 +104,7 @@ note](docs/ARCHITECTURE.md) объясняет замену контрактов
 benchmark одинаковой работы от функционального сравнения с известными проектами.
 
 ```cmake
-find_package(vosp_contracts 0.8 REQUIRED CONFIG)
+find_package(vosp_contracts 0.10 REQUIRED CONFIG)
 target_link_libraries(your_target PRIVATE vosp::contracts)
 ```
 

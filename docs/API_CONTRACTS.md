@@ -2,9 +2,15 @@
 
 ## Общественная поверхность
 
-- `<vosp/contracts/error.hpp>`: концепции `Error`, `Result` и `ErrorModel`;
-- `<vosp/contracts/logging.hpp>`: концепции `LogEntry` и `LogSink`;
-- `<vosp/contracts.hpp>`: поддерживаемый зонт;
+- `<vosp/contracts/error.hpp>`: концепты `Error`, `Result` и `ErrorModel`;
+- `<vosp/contracts/cache.hpp>`: владеющий key-value cache и очистка expiration;
+- `<vosp/contracts/logging.hpp>`: концепты `LogEntry` и `LogSink`;
+- `<vosp/contracts/protocol.hpp>`: сообщения, кодеки, framing и stream decoder;
+- `<vosp/contracts/transport.hpp>`: byte-stream, connector и datagram;
+- `<vosp/contracts/security.hpp>`: secure-byte, digest, authenticator и permission;
+- `<vosp/contracts/configuration.hpp>`: snapshot, provider и observer;
+- `<vosp/contracts/telemetry.hpp>`: record и exporter;
+- `<vosp/contracts.hpp>`: поддерживаемый umbrella;
 - `vosp::contracts`: экспортированная цель CMake.
 
 ## Модель Error
@@ -19,6 +25,14 @@
 Запись журнала предоставляет ошибку и уровень. Sink структурно реализует
 `bool write(const Entry&)`. Наследование и конкретный виртуальный интерфейс не требуются
 MCF.
+
+## Security-provider
+
+`SecureBytes` требует изменяемый и неизменяемый span байтов и явную операцию
+стирания `noexcept`. `DigestProvider` и `MessageAuthenticator` определяют
+форму provider с result, но не выбирают и не реализуют алгоритм.
+`PermissionPolicy` описывает только решение авторизации; типы permission и
+resource принадлежат приложению.
 
 ## Диагностика
 

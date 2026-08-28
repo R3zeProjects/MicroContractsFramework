@@ -31,6 +31,7 @@ struct Model
 };
 
 static_assert(vosp::contracts::ErrorModel<Model>);
+static_assert(vosp::contracts::version::api == "0.10.0-beta");
 
 struct TelemetryRecord
 {

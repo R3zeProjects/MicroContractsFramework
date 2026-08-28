@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.25)
 
-project(MicroContractsFramework VERSION 0.8.0 LANGUAGES CXX)
+project(MicroContractsFramework VERSION 0.10.0 LANGUAGES CXX)
 
 set(MICRO_CONTRACTS_FRAMEWORK_PRERELEASE "beta")
 
@@ -27,9 +27,11 @@ target_compile_options(MicroContractsFramework INTERFACE
 if(BUILD_TESTING)
     add_library(MicroContractsFrameworkHeaderContracts OBJECT
         tests/header_contracts/configuration_header.cpp
+        tests/header_contracts/cache_header.cpp
         tests/header_contracts/error_header.cpp
         tests/header_contracts/logging_header.cpp
         tests/header_contracts/protocol_header.cpp
+        tests/header_contracts/security_header.cpp
         tests/header_contracts/telemetry_header.cpp
         tests/header_contracts/transport_header.cpp)
     target_link_libraries(MicroContractsFrameworkHeaderContracts

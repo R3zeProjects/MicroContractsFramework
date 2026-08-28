@@ -27,6 +27,10 @@ MCF содержит протоколы compile-time, а не реализаци
 | `ByteStreamTransport<C, M>` | Упорядоченный ввод-вывод байтов |
 | `TransportConnector<C, E, M>` | Явные connect и reconnect |
 | `DatagramTransport<S, E, D, M>` | Ввод-вывод датаграмм с endpoint |
+| `SecureBytes<B>` | Владеющие байты с явным стиранием |
+| `DigestProvider<P, M>` | Заменяемое вычисление digest |
+| `MessageAuthenticator<A, M>` | Создание и проверка keyed-tag |
+| `PermissionPolicy<P, A, R>` | Решение авторизации для resource |
 
 Меньший [`examples/basic.cpp`](../examples/basic.cpp) демонстрирует минимальную
 заменяемую модель ошибки.

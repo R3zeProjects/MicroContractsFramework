@@ -71,7 +71,7 @@ jobs:
             -DCMAKE_CXX_COMPILER=clang++
           cmake --build build --parallel
           cmake --install build --prefix "$PWD/install"
-          grep -F 'set(PACKAGE_VERSION "0.8.0")' \
+          grep -F 'set(PACKAGE_VERSION "0.10.0")' \
             install/lib/cmake/vosp_contracts/vosp_contractsConfigVersion.cmake
       - name: Consume installed package
         run: |

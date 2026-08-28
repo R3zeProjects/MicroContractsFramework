@@ -4,8 +4,10 @@
 #include <vosp/persistence.hpp>
 #include <vosp/protocol.hpp>
 #include <vosp/resilience.hpp>
+#include <vosp/security.hpp>
 #include <vosp/service.hpp>
 #include <vosp/telemetry.hpp>
+#include <vosp/transport.hpp>
 #include <vosp/workflow.hpp>
 
 #include <array>
@@ -24,7 +26,11 @@
 namespace
 {
 static_assert(vosp::contracts::version::major == 0);
-static_assert(vosp::protocol::version::api == "0.1.0-beta");
+static_assert(vosp::protocol::version::api == "0.3.0-beta");
+static_assert(vosp::transport::version::api == "0.3.0-beta");
+static_assert(vosp::security::version::api == "0.3.0-beta");
+static_assert(vosp::contracts::ByteStreamTransport<vosp::transport::TcpStream,
+                                                   vosp::transport::Model>);
 static_assert(vosp::version::minor == 6);
 static_assert(vosp::persistence::version::minor == 3);
 static_assert(vosp::telemetry::version::patch >= 1);
@@ -315,6 +321,17 @@ template <typename Pipeline> class ConfigurationObserver
     return events == std::vector<std::string>{"start:database", "start:api", "stop:api",
                                                "stop:database"};
 }
+
+[[nodiscard]] bool validate_transport_plane()
+{
+    vosp::transport::TcpStream stream;
+    vosp::transport::UdpSocket socket;
+    const auto invalid_connect = stream.connect(vosp::transport::IpEndpoint{});
+    const auto invalid_receive = socket.receive(0);
+    return !stream.connected() && !socket.open() && !invalid_connect && !invalid_receive &&
+           invalid_connect.error().kind() == vosp::transport::ErrorCode::invalid_argument &&
+           invalid_receive.error().kind() == vosp::transport::ErrorCode::not_connected;
+}
 } // namespace
 
 int main(int argc, char **argv)
@@ -331,7 +348,7 @@ int main(int argc, char **argv)
     return validate_process_and_resilience(std::filesystem::absolute(argv[0])) &&
                    validate_data_plane() && validate_protocol_plane() &&
                    validate_async_data_plane() && validate_failure_paths() &&
-                   validate_service_control_plane()
+                   validate_service_control_plane() && validate_transport_plane()
                ? 0
                : 1;
 }
