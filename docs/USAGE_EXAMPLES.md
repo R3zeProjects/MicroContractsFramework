@@ -28,7 +28,7 @@ The compilable [`examples/contracts.cpp`](../examples/contracts.cpp) covers:
 | `TransportConnector<C, E, M>` | explicit connect and reconnect |
 | `DatagramTransport<S, E, D, M>` | endpoint-aware datagram I/O |
 | `PluginLifecycle<P, M>` | named start/stop plugin instance |
-| `PluginFactory<F, P, M>` | owning plugin creation |
+| `PluginFactory<F, M>` | owning plugin creation |
 | `SecureBytes<B>` | owning bytes with explicit erasure |
 | `DigestProvider<P, M>` | replaceable digest calculation |
 | `MessageAuthenticator<A, M>` | keyed tag creation and verification |

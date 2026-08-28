@@ -32,6 +32,8 @@ struct Plugin
 
 struct Factory
 {
+    using plugin_type = Plugin;
+
     [[nodiscard]] Model::Result<std::unique_ptr<Plugin>> create()
     {
         return std::make_unique<Plugin>();
@@ -40,10 +42,11 @@ struct Factory
 
 struct InvalidFactory
 {
+    using plugin_type = Plugin;
     [[nodiscard]] Plugin *create();
 };
 
 static_assert(vosp::contracts::PluginLifecycle<Plugin, Model>);
-static_assert(vosp::contracts::PluginFactory<Factory, Plugin, Model>);
-static_assert(!vosp::contracts::PluginFactory<InvalidFactory, Plugin, Model>);
+static_assert(vosp::contracts::PluginFactory<Factory, Model>);
+static_assert(!vosp::contracts::PluginFactory<InvalidFactory, Model>);
 } // namespace

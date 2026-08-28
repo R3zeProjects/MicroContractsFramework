@@ -134,6 +134,8 @@ struct TestPlugin {
 };
 
 struct TestPluginFactory {
+  using plugin_type = TestPlugin;
+
   [[nodiscard]] TestErrorModel::Result<std::unique_ptr<TestPlugin>> create() {
     return std::make_unique<TestPlugin>();
   }
@@ -158,8 +160,7 @@ static_assert(vosp::contracts::ConfigurationObserver<
               TestConfigurationObserver, TestConfigurationSnapshot>);
 static_assert(vosp::contracts::KeyValueCache<TestCache>);
 static_assert(vosp::contracts::PluginLifecycle<TestPlugin, TestErrorModel>);
-static_assert(vosp::contracts::PluginFactory<TestPluginFactory, TestPlugin,
-                                             TestErrorModel>);
+static_assert(vosp::contracts::PluginFactory<TestPluginFactory, TestErrorModel>);
 } // namespace
 
 int main() {

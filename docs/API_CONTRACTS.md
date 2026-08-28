@@ -39,8 +39,8 @@ permission and resource types remain application-owned.
 
 `PluginLifecycle<Type, Model>` requires stable name and version views plus explicit
 `start()` and `stop()` operations using the selected error model.
-`PluginFactory<Factory, Plugin, Model>` requires an owning
-`Result<std::unique_ptr<Plugin>>`. MCF does not define a base class, registry,
+`PluginFactory<Factory, Model>` obtains `Plugin` from `Factory::plugin_type` and
+requires an owning `Result<std::unique_ptr<Plugin>>`. MCF does not define a base class, registry,
 dynamic-library loader, ABI structure, allocation mechanism, or unload policy.
 
 ## Diagnostics

@@ -49,7 +49,7 @@ wrapper objects, conversions, or adapter layers.
 - `vosp::contracts::KeyValueCache<C>` checks owning cache operations, capacity,
   erasure, and expiration cleanup without prescribing LRU/LFU storage.
 - `vosp::contracts::PluginLifecycle<P, M>` checks named start/stop instances;
-- `vosp::contracts::PluginFactory<F, P, M>` checks owning plugin creation.
+- `vosp::contracts::PluginFactory<F, M>` checks owning plugin creation.
 - `vosp::contracts::SecureBytes<B>` checks erasable secret ownership;
 - `vosp::contracts::DigestProvider<P, M>` checks digest providers;
 - `vosp::contracts::MessageAuthenticator<A, M>` checks keyed tag providers;

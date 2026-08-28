@@ -81,6 +81,8 @@ struct Plugin {
 };
 
 struct PluginFactory {
+  using plugin_type = Plugin;
+
   [[nodiscard]] ErrorModel::Result<std::unique_ptr<Plugin>> create() {
     return std::make_unique<Plugin>();
   }
@@ -96,7 +98,7 @@ static_assert(vosp::contracts::ConfigurationSnapshot<Snapshot>);
 static_assert(vosp::contracts::ConfigurationProvider<Provider>);
 static_assert(vosp::contracts::ConfigurationObserver<Observer, Snapshot>);
 static_assert(vosp::contracts::PluginLifecycle<Plugin, ErrorModel>);
-static_assert(vosp::contracts::PluginFactory<PluginFactory, Plugin, ErrorModel>);
+static_assert(vosp::contracts::PluginFactory<PluginFactory, ErrorModel>);
 
 int main() {
   Provider provider;

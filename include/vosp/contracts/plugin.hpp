@@ -22,10 +22,13 @@ concept PluginLifecycle = ErrorModel<Model> && std::destructible<Type> &&
 };
 
 /** @brief Factory that creates one owning plugin instance or a model error. */
-template <typename Factory, typename Plugin, typename Model>
-concept PluginFactory = PluginLifecycle<Plugin, Model> && requires(Factory &factory)
+template <typename Factory, typename Model>
+concept PluginFactory = requires
+{
+    typename Factory::plugin_type;
+} && PluginLifecycle<typename Factory::plugin_type, Model> && requires(Factory &factory)
 {
     { factory.create() } ->
-        std::same_as<typename Model::template Result<std::unique_ptr<Plugin>>>;
+        std::same_as<typename Model::template Result<std::unique_ptr<typename Factory::plugin_type>>>;
 };
 } // namespace vosp::contracts
