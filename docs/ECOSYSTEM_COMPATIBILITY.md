@@ -11,7 +11,7 @@
 | MicroContractsFramework | 0.10.x beta | `vosp_contracts` | `vosp::contracts` |
 | MicroProtocolFramework | 0.3.x beta | `mprotocol` | `vosp::protocol`, `vosp::transport`, `vosp::security` |
 | MicroErrorFramework | 0.6.x beta | `vosp` | `vosp::vosp` |
-| MicroPersistenceFramework | 0.3.x beta | `mpf` | `vosp::persistence` |
+| MicroPersistenceFramework | 0.4.x beta | `mpf` | `vosp::persistence` |
 | MicroTelemetryFramework | 0.1.1+ beta | `mtf` | `vosp::telemetry` |
 | MicroConfigurationFramework | 0.1.x beta | `mconfig` | `vosp::configuration` |
 | MicroResilienceFramework | 0.1.x beta | `mrf` | `vosp::resilience` |
@@ -35,8 +35,8 @@ compile-time-границу без runtime-зависимости. Gate:
 5. запрещает прямые include-зависимости runtime-модулей в core-деревьях `include/` и
    `src/`, а также runtime-зависимости в build-графе MCF;
 6. совместно запускает configuration, error, logging, протокольный фрейминг,
-   persistence, telemetry, resilience, child-process workflow и жизненный цикл
-   in-process сервисов;
+   ограниченный cache, persistence, telemetry, resilience, child-process workflow и
+   жизненный цикл in-process сервисов;
 7. проверяет корректную и ошибочную конфигурацию, отказ persistence, восстановление
    retry, прямой export, ограниченный async drain, отклонение после shutdown и
    ненулевое завершение дочернего процесса;
