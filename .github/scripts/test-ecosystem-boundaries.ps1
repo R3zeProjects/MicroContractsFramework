@@ -12,7 +12,7 @@ $contracts = (Resolve-Path -LiteralPath $ContractsSource).Path
 $frameworks = (Resolve-Path -LiteralPath $FrameworksRoot).Path
 
 $modules = @(
-    @{ Name = 'MCF'; Path = $contracts; Allowed = @('vosp/contracts') },
+    @{ Name = 'MCF'; Path = $contracts; Allowed = @('vosp/contracts', 'vosp/testing') },
     @{ Name = 'MProtocolF'; Path = (Join-Path $frameworks 'MicroProtocolFramework');
        Allowed = @('vosp/protocol', 'vosp/transport', 'vosp/security',
                    'vosp/contracts') },
