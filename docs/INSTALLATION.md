@@ -26,14 +26,21 @@ cmake --install build/mcf --prefix install
 ```
 
 ```cmake
-find_package(vosp_contracts 0.11 REQUIRED CONFIG)
+find_package(vosp_contracts 0.12 REQUIRED CONFIG)
 target_link_libraries(application PRIVATE vosp::contracts)
+target_link_libraries(application_tests PRIVATE vosp::testing)
 ```
 
 Настройте потребителя с `-DCMAKE_PREFIX_PATH=/absolute/path/to/install`. MCF это
-header-only; связывание цели распространяет пути включения, C++23 и предупреждения.
-Библиотека runtime не установлена.
+header-only библиотека; связывание любой цели распространяет пути включения, C++23 и
+предупреждения. `vosp::testing` дополнительно распространяет стандартную цель потоков
+CMake. Библиотека runtime не устанавливается.
 
 ## Проверьте примеры
 
-Запустите `MicroContractsFrameworkExample` и `MicroContractsFrameworkContractsExample` из каталога сборки. Отключите их в сборках зависимостей с `-DMCF_BUILD_EXAMPLES=OFF`.
+Запустите `MicroContractsFrameworkExample`, `MicroContractsFrameworkContractsExample` и
+`MicroContractsFrameworkTestingExample` из каталога сборки. Отключите их в сборках
+зависимостей с `-DMCF_BUILD_EXAMPLES=OFF`.
+
+Benchmark исключены из обычных сборок и устанавливаемых пакетов. Включите отдельный
+исполняемый файл с помощью `-DMCF_BUILD_BENCHMARKS=ON`.

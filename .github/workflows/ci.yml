@@ -47,6 +47,7 @@ jobs:
           cmake -S . -B build
           -DCMAKE_BUILD_TYPE=Release
           -DBUILD_TESTING=ON
+          -DMCF_BUILD_BENCHMARKS=ON
           ${{ matrix.cmake_args }}
       - name: Build
         run: cmake --build build --config Release --parallel
@@ -71,7 +72,7 @@ jobs:
             -DCMAKE_CXX_COMPILER=clang++
           cmake --build build --parallel
           cmake --install build --prefix "$PWD/install"
-          grep -F 'set(PACKAGE_VERSION "0.11.0")' \
+          grep -F 'set(PACKAGE_VERSION "0.12.0")' \
             install/lib/cmake/vosp_contracts/vosp_contractsConfigVersion.cmake
       - name: Consume installed package
         run: |
@@ -79,6 +80,7 @@ jobs:
             -DCMAKE_PREFIX_PATH="$PWD/install" \
             -DCMAKE_CXX_COMPILER=clang++
           cmake --build consumer --parallel
+          ctest --test-dir consumer --output-on-failure
           ./consumer/vosp_contracts_package_consumer
 
   ecosystem-packages:
@@ -187,8 +189,40 @@ jobs:
           -DCMAKE_CXX_COMPILER=clang++
           -DCMAKE_CXX_CLANG_TIDY=clang-tidy
           -DBUILD_TESTING=ON
+          -DMCF_BUILD_BENCHMARKS=ON
       - name: Analyze contracts and mock implementations
         run: cmake --build build --parallel 2
+
+  sanitizers:
+    name: Linux ${{ matrix.name }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: ASan + UBSan
+            compile_flags: -fsanitize=address,undefined -fno-omit-frame-pointer
+            link_flags: -fsanitize=address,undefined
+          - name: TSan
+            compile_flags: -fsanitize=thread -fno-omit-frame-pointer -fno-pie
+            link_flags: -fsanitize=thread -no-pie
+    env:
+      CXXFLAGS: ${{ matrix.compile_flags }}
+      LDFLAGS: ${{ matrix.link_flags }}
+    steps:
+      - uses: actions/checkout@v5
+      - name: Configure
+        run: >-
+          cmake -S . -B build
+          -DCMAKE_BUILD_TYPE=Debug
+          -DCMAKE_CXX_COMPILER=g++
+          -DBUILD_TESTING=ON
+          -DMCF_BUILD_EXAMPLES=ON
+      - name: Build
+        run: cmake --build build --parallel 2
+      - name: Test
+        run: ctest --test-dir build --output-on-failure
 
   translation-parity:
     if: github.ref == 'refs/heads/main-ru'

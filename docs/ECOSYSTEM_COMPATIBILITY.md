@@ -8,7 +8,7 @@
 
 | Фреймворк | Линия версий | Пакет CMake | Импортируемая цель |
 | --- | --- | --- | --- |
-| MicroContractsFramework | 0.11.x beta | `vosp_contracts` | `vosp::contracts` |
+| MicroContractsFramework | 0.12.x beta | `vosp_contracts` | `vosp::contracts`, `vosp::testing` |
 | MicroProtocolFramework | 0.3.x beta | `mprotocol` | `vosp::protocol`, `vosp::transport`, `vosp::security` |
 | MicroErrorFramework | 0.6.x beta | `vosp` | `vosp::vosp` |
 | MicroPersistenceFramework | 0.4.x beta | `mpf` | `vosp::persistence` |
@@ -36,7 +36,8 @@ compile-time-границу без runtime-зависимости. Gate:
    `src/`, а также runtime-зависимости в build-графе MCF;
 6. совместно запускает configuration, error, logging, протокольный фрейминг,
    ограниченный cache, persistence, telemetry, resilience, child-process workflow,
-   жизненный цикл in-process сервисов и операции фабрики плагинов;
+   жизненный цикл in-process сервисов, операции фабрики плагинов и детерминированные
+   test runner;
 7. проверяет корректную и ошибочную конфигурацию, отказ persistence, восстановление
    retry, прямой export, ограниченный async drain, отклонение после shutdown и
    ненулевое завершение дочернего процесса;
